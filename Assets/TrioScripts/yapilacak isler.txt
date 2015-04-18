@@ -1,0 +1,4 @@
+#Things to do
+1. Topun ziplama fizigi.
+2. Random gelen engeller
+3. Objelerin titremeden yukselmesi
