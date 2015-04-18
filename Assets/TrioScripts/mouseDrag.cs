@@ -3,7 +3,6 @@ using System.Collections;
 
 public class mouseDrag : MonoBehaviour {
 
-	float distance = 20;
 
 	void OnMouseDrag()
 	{
@@ -11,7 +10,6 @@ public class mouseDrag : MonoBehaviour {
 		Vector3 objPosition = Camera.main.ScreenToWorldPoint (mousePosition);
 
 		transform.position = objPosition;
-
-
+		gameObject.AddComponent ("ObjectBehavior");
 	}
 }
