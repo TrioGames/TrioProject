@@ -18,7 +18,6 @@ public class MainCameraScript : MonoBehaviour {
 	// Update is called once per frame
 	void LateUpdate () 
 	{
-		transform.position.y = BallBehaviour.max_height - 10;
-		
+		//transform.position.y = BallBehaviour.max_height - 10;	
 	}
 }
