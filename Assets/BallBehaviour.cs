@@ -17,7 +17,7 @@ public class BallBehaviour : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col)
 	{
-		rigidbody.AddForce (transform.up * 200);
+		rigidbody.AddForce (transform.up * 500);
 		if (col.gameObject.name == "RespawnPlane")
 		{
 			print("Game Over");

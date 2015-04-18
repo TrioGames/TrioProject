@@ -13,18 +13,17 @@ public class ObjectBehavior : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void FixedUpdate () {
+		print ("Camera yukseldi : " + MainCameraScript.CameraInc);
+		transform.position = new Vector3(transform.position.x, MainCameraScript.currentCam, transform.position.z);
+		//transform.position = new Vector3(transform.position.x, transform.position.y + MainCameraScript.CameraInc, transform.position.z);
 	}
 
 	void OnCollisionEnter(Collision col)
 	{
-		//collisionCount += 1;
-		//if (collisionCount == 2) {
 		gameObject.name = "Destroyed" + gameObject.name;
 		print ("Destroying " + gameObject.name);
 		DestroyObject (gameObject);	
-		//}
 	}
 	
 }

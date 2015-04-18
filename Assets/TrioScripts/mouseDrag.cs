@@ -10,6 +10,6 @@ public class mouseDrag : MonoBehaviour {
 		Vector3 objPosition = Camera.main.ScreenToWorldPoint (mousePosition);
 
 		transform.position = objPosition;
-		gameObject.AddComponent ("ObjectBehavior");
+		//gameObject.AddComponent ("ObjectBehavior");
 	}
 }

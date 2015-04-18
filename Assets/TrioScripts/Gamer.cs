@@ -16,8 +16,8 @@ public class Gamer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-			obj1 = GetRandomObject ();
-			obj1.transform.position = obj1Pos;
+		obj1 = GetRandomObject ();
+		obj1.transform.position = obj1Pos;
 
 		obj2 = GetRandomObject ();
 		obj2.transform.position = obj2Pos;
@@ -61,7 +61,7 @@ public class Gamer : MonoBehaviour {
 		}
 		obj.tag = "Respawn";
 		obj.AddComponent("mouseDrag");
-		//obj.AddComponent ("ObjectBehavior");
+		obj.AddComponent ("ObjectBehavior");
 		obj.transform.localScale -= new Vector3(objScale, objScale, objScale);
 		return obj;
 	}
