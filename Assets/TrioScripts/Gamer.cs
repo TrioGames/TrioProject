@@ -7,9 +7,9 @@ public class Gamer : MonoBehaviour {
 	public GameObject obj1;
 	public GameObject obj2;
 	public GameObject obj3;
-	private Vector3 obj1Pos = new Vector3 (-0.6f, -0.48f , -17.0f);
-	private Vector3 obj2Pos = new Vector3 (-0.035f , -0.48f, -17.0f);
-	private Vector3 obj3Pos = new Vector3 (0.584f , -0.48f, -17.0f);
+	private Vector3 obj1Pos = new Vector3 (-0.6f, -0.48f , -17.2f);
+	private Vector3 obj2Pos = new Vector3 (-0.035f , -0.48f, -17.2f);
+	private Vector3 obj3Pos = new Vector3 (0.584f , -0.48f, -17.2f);
 	public float objScale = 0.75f;
 
 
