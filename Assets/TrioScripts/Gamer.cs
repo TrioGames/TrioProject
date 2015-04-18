@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Gamer : MonoBehaviour {
 
+	private Transform playerTrans;
 	public GameObject obj1;
 	public GameObject obj2;
 	public GameObject obj3;
@@ -10,6 +11,7 @@ public class Gamer : MonoBehaviour {
 	private Vector3 obj2Pos = new Vector3 (-0.035f , -0.48f, -17.0f);
 	private Vector3 obj3Pos = new Vector3 (0.584f , -0.48f, -17.0f);
 	public float objScale = 0.75f;
+
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,16 @@ public class Gamer : MonoBehaviour {
 
 		obj3 = GetRandomObject ();
 		obj3.transform.position = obj3Pos;
+	}
+
+	void Awake () {
+		playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
+		StartGame();
+	}
+	
+	void StartGame()
+	{
+		Time.timeScale = 1.0f;
 	}
 
 	GameObject GetRandomObject()
