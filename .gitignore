@@ -1,12 +1,8 @@
-
-Assets/.DS_Store
-
-Assets/.DS_Store
-
-.DS_Store
-
-.DS_Store
-
-Assets/.DS_Store
-
-.DS_Store
+ # Files to ignore
+ *.csproj
+ *.sln
+ *.pidb
+ *.userprefs
+ Library/
+ Temp/
+ .DS_Store
