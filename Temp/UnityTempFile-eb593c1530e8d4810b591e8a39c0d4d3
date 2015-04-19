@@ -40,8 +40,8 @@
 -define:ENABLE_PROFILER
 -define:UNITY_EDITOR
 -define:UNITY_EDITOR_OSX
-'Assets/BallBehaviour.cs'
 'Assets/MainCameraScript.cs'
+'Assets/TrioScripts/BallBehaviour.cs'
 'Assets/TrioScripts/Gamer.cs'
 'Assets/TrioScripts/ObjectBehavior.cs'
 'Assets/TrioScripts/destroyobject.cs'
