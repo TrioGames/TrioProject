@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Gamer : MonoBehaviour {
 
+	public Transform platformPrefab;
 	private Transform playerTrans;
 	public GameObject obj1;
 	public GameObject obj2;
@@ -11,6 +12,10 @@ public class Gamer : MonoBehaviour {
 	private Vector3 obj2Pos = new Vector3 (-0.035f , -0.48f, -17.2f);
 	private Vector3 obj3Pos = new Vector3 (0.584f , -0.48f, -17.2f);
 	public float objScale = 0.75f;
+
+	private float platformsSpawnedUpTo = 0.0f;
+	private ArrayList platforms;
+	private float nextPlatformCheck = 0.0f;
 
 
 	// Use this for initialization
@@ -28,6 +33,8 @@ public class Gamer : MonoBehaviour {
 
 	void Awake () {
 		playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
+		platforms = new ArrayList();
+		SpawnPlatforms(2.0f);
 		StartGame();
 	}
 	
@@ -59,7 +66,10 @@ public class Gamer : MonoBehaviour {
 			obj.name = "Plane";
 			break;
 		}
-		obj.tag = "Respawn";
+		int randomAngle = (int) Random.Range(-180, 180);
+		var rot = transform.rotation;
+		obj.transform.rotation = rot * Quaternion.Euler(0, 0, randomAngle); 
+		obj.tag = "TrioObjects";
 		obj.AddComponent("mouseDrag");
 		obj.AddComponent ("ObjectBehavior");
 		obj.transform.localScale -= new Vector3(objScale, objScale, objScale);
@@ -90,9 +100,50 @@ public class Gamer : MonoBehaviour {
 		}
 	}
 
+	void SpawnPlatforms(float upTo)
+	{
+		float spawnHeight = platformsSpawnedUpTo;
+		while (spawnHeight <= upTo)
+		{
+
+			float x = Random.Range(-1.63f, 1.43f);
+			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
+			
+			Transform plat = (Transform)Instantiate(platformPrefab, pos, Quaternion.identity);
+			platforms.Add(plat);
+			spawnHeight += Random.Range(1.6f, 3.5f);
+		}
+		platformsSpawnedUpTo = upTo;
+	}
+
 
 	// Update is called once per frame
 	void Update () {
 		RecreateMissingObject ();
+		playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
+		float playerHeight = playerTrans.position.y;
+		if (playerHeight > nextPlatformCheck)
+		{
+			PlatformMaintenaince(); //Spawn new platforms
+		}
+	}
+
+	void PlatformMaintenaince()
+	{
+		nextPlatformCheck = playerTrans.position.y + 10;
+		
+		//Delete all platforms below us (save performance)
+		for(int i = platforms.Count-1;i>=0;i--)
+		{
+			Transform plat = (Transform)platforms[i];
+			if (plat.position.y < (transform.position.y - 1))
+			{
+				Destroy(plat.gameObject);
+				platforms.RemoveAt(i);
+			}            
+		}
+		
+		//Spawn new platforms, 25 units in advance
+		SpawnPlatforms(nextPlatformCheck + 2);
 	}
 }
