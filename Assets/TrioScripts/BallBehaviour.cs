@@ -17,8 +17,9 @@ public class BallBehaviour : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col)
 	{
-		if (col.gameObject.tag == "TrioObjects" || col.gameObject.name == "platform") {
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 10, rigidbody.velocity.z); 
+		//if (col.gameObject.tag == "TrioObject" || col.gameObject.tag == "Platform") {
+		if (col.gameObject.tag == "TrioObject") {
+			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 5, rigidbody.velocity.z); 
 		}
 
 		if (col.gameObject.name == "RespawnPlane")

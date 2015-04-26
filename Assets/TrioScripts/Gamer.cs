@@ -69,7 +69,7 @@ public class Gamer : MonoBehaviour {
 		int randomAngle = (int) Random.Range(-180, 180);
 		var rot = transform.rotation;
 		obj.transform.rotation = rot * Quaternion.Euler(0, 0, randomAngle); 
-		obj.tag = "TrioObjects";
+		obj.tag = "TrioObject";
 		obj.AddComponent("mouseDrag");
 		obj.AddComponent ("ObjectBehavior");
 		obj.transform.localScale -= new Vector3(objScale, objScale, objScale);
@@ -110,6 +110,7 @@ public class Gamer : MonoBehaviour {
 			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
 			
 			Transform plat = (Transform)Instantiate(platformPrefab, pos, Quaternion.identity);
+			plat.tag = "Platform";
 			platforms.Add(plat);
 			spawnHeight += Random.Range(1.6f, 3.5f);
 		}
