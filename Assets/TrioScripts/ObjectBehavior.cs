@@ -15,11 +15,10 @@ public class ObjectBehavior : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
 		float currentObjectHeight = initHeight + MainCameraScript.CameraInc;
-		float newHeight = Mathf.Lerp(transform.position.y, currentObjectHeight, Time.deltaTime * 100);
 		if (transform.position.z != defaultZ)
-			transform.position = transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);;
+			transform.position = transform.position = new Vector3(transform.position.x, currentObjectHeight, transform.position.z);;
 	}
 
 	void OnCollisionEnter(Collision col)
