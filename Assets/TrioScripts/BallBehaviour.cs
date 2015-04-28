@@ -7,6 +7,7 @@ public class BallBehaviour : MonoBehaviour {
 	public GUIText CountText;
 	public static float max_height = 0;
 	private int count = 0;
+	public float maxSpeed = 8;
 	// Use this for initialization
 	void Start () {
 	}
@@ -22,11 +23,14 @@ public class BallBehaviour : MonoBehaviour {
 	{
 		//if (col.gameObject.tag == "TrioObject" || col.gameObject.tag == "Platform") {
 		if (col.gameObject.tag == "TrioObject") {
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x, 5, rigidbody.velocity.z); 
+			float xSpeed = rigidbody.velocity.x;
+			float ySpeed = Mathf.Abs(rigidbody.velocity.y);
+			float cons = maxSpeed / Mathf.Sqrt( (xSpeed * xSpeed) + (ySpeed * ySpeed) );
+			rigidbody.velocity = new Vector3(xSpeed * cons, (ySpeed * cons) + 5 , rigidbody.velocity.z); 
+			//rigidbody.velocity = new Vector3(xSpeed , 10, rigidbody.velocity.z); 
 			ses1.Play();
 			count++;
 			CountText.text = "Puan: " + count.ToString();
-
 		}
 
 		if (col.gameObject.name == "RespawnPlane")
