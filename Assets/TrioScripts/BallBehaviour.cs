@@ -5,6 +5,7 @@ using System.Collections;
 public class BallBehaviour : MonoBehaviour {
 	public AudioSource ses1;
 	public GUIText CountText;
+	public TextMesh PointText;
 	public static float max_height = 0;
 	private int count = 0;
 	public float maxSpeed = 8;
@@ -30,12 +31,13 @@ public class BallBehaviour : MonoBehaviour {
 			//rigidbody.velocity = new Vector3(xSpeed , 10, rigidbody.velocity.z); 
 			ses1.Play();
 			count++;
-			CountText.text = "Puan: " + count.ToString();
+			PointText.text = count.ToString();
+			CountText.text = "Points: " + count.ToString();
 		}
 
 		if (col.gameObject.name == "RespawnPlane")
 		{
-			print("Game Over");
+			//print("Game Over");
 			Application.LoadLevel (0);
 		}
 	}

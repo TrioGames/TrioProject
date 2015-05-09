@@ -50,6 +50,7 @@
      <Compile Include="Assets\TrioScripts\Gamer.cs" />
      <Compile Include="Assets\TrioScripts\MainCameraScript.cs" />
      <Compile Include="Assets\TrioScripts\ObjectBehavior.cs" />
+     <Compile Include="Assets\TrioScripts\PlatformBehaviour.cs" />
      <Compile Include="Assets\TrioScripts\destroyobject.cs" />
      <Compile Include="Assets\TrioScripts\mouseDrag.cs" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Multiply Culled.shader" />

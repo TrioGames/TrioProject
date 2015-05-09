@@ -5,6 +5,7 @@ public class Gamer : MonoBehaviour {
 
 	public Transform platformPrefab;
 	private Transform playerTrans;
+	private Transform planeTrans;
 	public GameObject obj1;
 	public GameObject obj2;
 	public GameObject obj3;
@@ -15,7 +16,7 @@ public class Gamer : MonoBehaviour {
 
 	private float platformsSpawnedUpTo = 0.0f;
 	private ArrayList platforms;
-	private float nextPlatformCheck = 0.0f;
+	private float nextPlatformCheck = 2.0f;
 
 
 	// Use this for initialization
@@ -82,21 +83,21 @@ public class Gamer : MonoBehaviour {
 			//print ("obj1 is null. So recreating...");
 			obj1 = GetRandomObject ();
 			obj1.transform.position = obj1Pos;
-			print ("obj1 is : " + obj1.name );
+			//print ("obj1 is : " + obj1.name );
 		}
 
 		if (obj2 == null || obj2.name.StartsWith("Destroyed")) {
 			//print ("obj2 is null. So recreating...");
 			obj2 = GetRandomObject ();
 			obj2.transform.position = obj2Pos;
-			print ("obj2 is : " + obj2.name );
+			//print ("obj2 is : " + obj2.name );
 		}
 
 		if (obj3 == null || obj3.name.StartsWith("Destroyed")) {
 			//print ("obj3 is null. So recreating...");
 			obj3 = GetRandomObject ();
 			obj3.transform.position = obj3Pos;
-			print ("obj3 is : " + obj3.name);
+			//print ("obj3 is : " + obj3.name);
 		}
 	}
 
@@ -106,11 +107,12 @@ public class Gamer : MonoBehaviour {
 		while (spawnHeight <= upTo)
 		{
 
-			float x = Random.Range(-1.63f, 1.43f);
+			float x = Random.Range(-0.8f, 0.8f);
 			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
 			
-			Transform plat = (Transform)Instantiate(platformPrefab, pos, Quaternion.identity);
+			Transform plat = (Transform) Instantiate(platformPrefab, pos, Quaternion.identity) ;
 			plat.tag = "Platform";
+
 			platforms.Add(plat);
 			spawnHeight += Random.Range(1.6f, 3.5f);
 		}
@@ -123,28 +125,25 @@ public class Gamer : MonoBehaviour {
 		RecreateMissingObject ();
 		playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
 		float playerHeight = playerTrans.position.y;
+		DeletePlatformsBelowPlane ();
 		if (playerHeight > nextPlatformCheck)
 		{
-			PlatformMaintenaince(); //Spawn new platforms
+			nextPlatformCheck = playerTrans.position.y + 10;
+			SpawnPlatforms(nextPlatformCheck + 2);
 		}
 	}
 
-	void PlatformMaintenaince()
+	void DeletePlatformsBelowPlane ()
 	{
-		nextPlatformCheck = playerTrans.position.y + 10;
-		
-		//Delete all platforms below us (save performance)
 		for(int i = platforms.Count-1;i>=0;i--)
 		{
 			Transform plat = (Transform)platforms[i];
-			if (plat.position.y < (transform.position.y - 1))
+			planeTrans = GameObject.FindGameObjectWithTag("Respawn").transform;
+			if (plat.position.y < planeTrans.position.y)
 			{
 				Destroy(plat.gameObject);
 				platforms.RemoveAt(i);
 			}            
 		}
-		
-		//Spawn new platforms, 25 units in advance
-		SpawnPlatforms(nextPlatformCheck + 2);
 	}
 }

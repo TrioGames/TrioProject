@@ -23,7 +23,7 @@ public class ObjectBehavior : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col)
 	{
-		print ("Destroying " + gameObject.name);
+		//print ("Destroying " + gameObject.name);
 		gameObject.name = "Destroyed" + gameObject.name;
 		DestroyObject (gameObject);	
 	}
