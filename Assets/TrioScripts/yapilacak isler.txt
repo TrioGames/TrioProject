@@ -1,4 +1,15 @@
 #Things to do
+
+#9 mayis
+1. bug fix
+objelerin tiklayinca yeniden gelmemesi
+objelerin siyahun arkasinda kalmasi
+2. topun carpinca objeleri yikmasi
+3. topun bonus alinca engelleri yikaracak cok hizli yukselmesi
+4. background
+5. skorun duzeltilmesi
+
+#nisan falan
 1. Topun ziplama fizigi.
 2. Random gelen engeller
 3. Objelerin titremeden yukselmesi
