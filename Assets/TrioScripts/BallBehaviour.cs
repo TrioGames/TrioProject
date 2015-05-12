@@ -42,4 +42,12 @@ public class BallBehaviour : MonoBehaviour {
 		}
 	}
 
+	void OnTriggerEnter(Collider col)
+	{
+		if (col.gameObject.name == "Boost Bonus") {
+			print ("Platforms have been disabled");
+			Gamer.instance.DisablePlatforms4BoostedBall();
+		}
+	}
+
 }

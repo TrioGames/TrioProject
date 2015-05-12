@@ -7,8 +7,8 @@ objelerin siyahun arkasinda kalmasi
 2. topun carpinca objeleri yikmasi
 3. topun bonus alinca engelleri yikaracak cok hizli yukselmesi
 4. background
-5. skorun duzeltilmesi
-5. objelere ve engellere texture eklenmesi
+5. skorun duzeltilmesi #done
+6. objelere ve engellere texture eklenmesi 
 
 #nisan falan
 1. Topun ziplama fizigi.

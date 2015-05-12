@@ -17,4 +17,12 @@ public class PlatformBehaviour : MonoBehaviour {
 	{
 
 	}
+
+	void OnCollisionEnter(Collision col)
+	{
+		if (col.gameObject.name == "mainball")
+		{
+			DestroyObject (gameObject);	
+		}
+	}
 }

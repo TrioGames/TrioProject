@@ -13,11 +13,14 @@ public class Gamer : MonoBehaviour {
 	private Vector3 obj2Pos = new Vector3 (-0.035f , -0.48f, -17.2f);
 	private Vector3 obj3Pos = new Vector3 (0.584f , -0.48f, -17.2f);
 	public float objScale = 0.75f;
+	private int defaultLayer = 0;
+	private int voidLayer;
 
 	private float platformsSpawnedUpTo = 0.0f;
 	private ArrayList platforms;
 	private float nextPlatformCheck = 2.0f;
 
+	public static Gamer instance { get; private set; }
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +36,7 @@ public class Gamer : MonoBehaviour {
 	}
 
 	void Awake () {
+		instance = this;
 		playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
 		platforms = new ArrayList();
 		SpawnPlatforms(2.0f);
@@ -41,12 +45,13 @@ public class Gamer : MonoBehaviour {
 	
 	void StartGame()
 	{
+		voidLayer = LayerMask.NameToLayer( "Void" );
 		Time.timeScale = 1.0f;
 	}
 
 	GameObject GetRandomObject()
 	{
-		int caseSwitch = Random.Range (0,2);
+		int caseSwitch = Random.Range (0,3);
 		GameObject obj;
 		switch (caseSwitch)
 		{
@@ -133,17 +138,42 @@ public class Gamer : MonoBehaviour {
 		}
 	}
 
-	void DeletePlatformsBelowPlane ()
+	public void DisablePlatforms4BoostedBall()
 	{
-		for(int i = platforms.Count-1;i>=0;i--)
-		{
+		for (int i = platforms.Count-1; i>=0; i--) {
 			Transform plat = (Transform)platforms[i];
-			planeTrans = GameObject.FindGameObjectWithTag("Respawn").transform;
-			if (plat.position.y < planeTrans.position.y)
-			{
-				Destroy(plat.gameObject);
-				platforms.RemoveAt(i);
-			}            
+			print("Layer:" + plat.gameObject.layer);
+			defaultLayer = plat.gameObject.layer;
+			plat.gameObject.layer = voidLayer;
 		}
 	}
+
+	public void EnablePlatforms4MainBall()
+	{
+		for (int i = platforms.Count-1; i>=0; i--) {
+			Transform plat = (Transform)platforms[i];
+			plat.gameObject.layer = defaultLayer;
+		}
+	}
+
+	void DeletePlatformsBelowPlane()
+	{
+				for (int i = platforms.Count-1; i>=0; i--) 
+				{
+						Transform plat = (Transform)platforms [i];
+						planeTrans = GameObject.FindGameObjectWithTag ("Respawn").transform;
+						if (plat == null)
+						{
+								platforms.RemoveAt (i);
+						}
+						else 
+						{
+								if (plat.position.y < planeTrans.position.y) 
+								{					
+										Destroy (plat.gameObject);
+										platforms.RemoveAt (i);
+								}     			
+						}
+				}
+		}
 }
