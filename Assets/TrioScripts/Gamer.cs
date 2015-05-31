@@ -4,11 +4,13 @@ using System.Collections;
 public class Gamer : MonoBehaviour {
 
 	public Transform platformPrefab;
+	public Transform powerupPrefab;
 	private Transform playerTrans;
 	private Transform planeTrans;
 	public GameObject obj1;
 	public GameObject obj2;
 	public GameObject obj3;
+	public Transform platWarning;
 	private Vector3 obj1Pos = new Vector3 (-0.6f, -0.48f , -17.2f);
 	private Vector3 obj2Pos = new Vector3 (-0.035f , -0.48f, -17.2f);
 	private Vector3 obj3Pos = new Vector3 (0.584f , -0.48f, -17.2f);
@@ -16,14 +18,28 @@ public class Gamer : MonoBehaviour {
 	private int defaultLayer = 0;
 	private int voidLayer;
 
-	private float platformsSpawnedUpTo = 0.0f;
+	//platform variables
+//	private float platformsSpawnedUpTo = 0.0f;
+//	private float nextPlatformCheck = 2.0f;
 	private ArrayList platforms;
-	private float nextPlatformCheck = 2.0f;
+	public float platformLower = Constants.HEIGHT_NO_PLATFORM;
+	public float platformRange = 500.0f;
 
+	//powerup variables
+	public int ballMode = Constants.NORMAL_MODE;
+	private float powerupSpawnedUpTo = 0.0f;
+	private float nextPowerUpCheck = 5.0f;
+
+	//public GUIText PlatformWarning;
+	public float boostTimer = -1;
+
+	//for singleton
 	public static Gamer instance { get; private set; }
 
 	// Use this for initialization
 	void Start () {
+
+		//PlatformWarning.enabled = false;	
 
 		obj1 = GetRandomObject ();
 		obj1.transform.position = obj1Pos;
@@ -37,9 +53,9 @@ public class Gamer : MonoBehaviour {
 
 	void Awake () {
 		instance = this;
-		playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
+		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
 		platforms = new ArrayList();
-		SpawnPlatforms(2.0f);
+		//SpawnPlatforms(2.0f);
 		StartGame();
 	}
 	
@@ -106,35 +122,183 @@ public class Gamer : MonoBehaviour {
 		}
 	}
 
-	void SpawnPlatforms(float upTo)
-	{
-		float spawnHeight = platformsSpawnedUpTo;
-		while (spawnHeight <= upTo)
-		{
 
+
+
+	// Update is called once per frame
+	void Update () {
+		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
+		float playerHeight = playerTrans.position.y;
+		RecreateMissingObject ();
+		MaintainPlatforms (playerHeight);
+		MaintainPowerups (playerHeight);
+		Warn4ComingPlatforms (playerHeight);
+	}
+
+	private void Warn4ComingPlatforms(float playerHeight)
+	{
+		Transform plat =  GetNearestPlatformsCoordinates (playerHeight);
+		if (plat != null) {
+			//PlatformWarning.transform.position = new Vector3(plat.position.x , PlatformWarning.transform.position.y , PlatformWarning.transform.position.z );
+			//PlatformWarning.enabled = true;
+			platWarning.position = new Vector3(plat.position.x , platWarning.position.y , platWarning.position.z );
+			//print ((int)PlatformWarning.transform.position.x + "," + (int)PlatformWarning.transform.position.y);
+		}
+		else 
+		{
+			//PlatformWarning.enabled = false;	
+		}
+	}
+
+	private Transform GetNearestPlatformsCoordinates (float warningHeightLimit)
+	{
+		string s = "Platforms: ";
+		float nearestplat = warningHeightLimit + 1000;
+		int nearestIndex = 0;
+		bool platformsNearby = false;
+		for (int i = platforms.Count-1; i>=0; i--) 
+		{
+			Transform plat = (Transform)platforms[i];
+			s += "(" + plat.position.x.ToString("0.0")  + "," + plat.position.y.ToString("0.0") + "),";
+			if (plat.position.y > warningHeightLimit)
+			{
+				if ( plat.position.y < nearestplat)
+				{
+					nearestplat = plat.position.y;
+					nearestIndex = i;
+					platformsNearby = true;
+				}
+			}
+		}
+		//return (Transform) platforms [nearestIndex];
+		if (platformsNearby)
+		{
+			print(s);
+			print ("Nearest : " + "(" + ((Transform) platforms[nearestIndex]).position.x.ToString("0.0") + "," +  ((Transform)platforms[nearestIndex]).position.y.ToString("0.0")  + ")");
+			return (Transform) platforms [nearestIndex];
+		}
+		else 
+			return null;
+	}
+
+	private void MaintainPowerups(float playerHeight)
+	{
+		// Update timer of the boost (fireball etc.)
+		if (ballMode == Constants.FIREBALL_MODE) {
+			boostTimer -= Time.deltaTime;
+			if (boostTimer < 0)
+			{
+				ballMode = Constants.NORMAL_MODE;
+				EnablePlatformsColliders();
+			}
+		}
+		
+		SpawnPowerups (playerHeight);
+	}
+
+	private void MaintainPlatforms(float playerHeight)
+	{
+		DeletePlatformsBelowPlane ();
+		if (playerHeight > platformLower - platformRange / 2) 
+		{
+			SpawnPlatforms(platformLower, platformLower + platformRange );
+		}
+	}
+
+	void SpawnPlatforms(float downTo, float upTo)
+	{
+		float spawnHeight = downTo;
+		while (spawnHeight <= upTo) 
+		{
+			spawnHeight += Random.Range(10.0f, 20.0f);
 			float x = Random.Range(-0.8f, 0.8f);
 			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
 			
 			Transform plat = (Transform) Instantiate(platformPrefab, pos, Quaternion.identity) ;
 			plat.tag = "Platform";
-
+			
+			if (ballMode == Constants.NORMAL_MODE){ // normal mode
+				plat.gameObject.GetComponent<Collider>().isTrigger = false;
+			}
+			else if (ballMode == Constants.FIREBALL_MODE){ // fireball
+				plat.gameObject.GetComponent<Collider>().isTrigger = true;
+			}
+			
 			platforms.Add(plat);
-			spawnHeight += Random.Range(1.6f, 3.5f);
 		}
-		platformsSpawnedUpTo = upTo;
+		platformLower = spawnHeight;
 	}
 
+//	void SpawnPlatforms(float upTo)
+//	{
+//		float spawnHeight = platformsSpawnedUpTo;
+//		while (spawnHeight <= upTo)
+//		{
+//			spawnHeight += Random.Range(5.0f, 20.0f);
+//			float x = Random.Range(-0.8f, 0.8f);
+//			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
+//			
+//			Transform plat = (Transform) Instantiate(platformPrefab, pos, Quaternion.identity) ;
+//			plat.tag = "Platform";
+//			
+//			if (ballMode == Constants.NORMAL_MODE){ // normal mode
+//				plat.gameObject.GetComponent<Collider>().isTrigger = false;
+//			}
+//			else if (ballMode == Constants.FIREBALL_MODE){ // fireball
+//				plat.gameObject.GetComponent<Collider>().isTrigger = true;
+//			}
+//			
+//			platforms.Add(plat);
+//
+//		}
+//		platformsSpawnedUpTo = spawnHeight;
+//
+//	}
 
-	// Update is called once per frame
-	void Update () {
-		RecreateMissingObject ();
-		playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
-		float playerHeight = playerTrans.position.y;
-		DeletePlatformsBelowPlane ();
-		if (playerHeight > nextPlatformCheck)
+	public void EnableFireballMode(float timer)
+	{
+		DisablePlatformsColliders ();
+		ballMode = Constants.FIREBALL_MODE;
+		boostTimer = timer;
+	}
+	
+	public void SpawnPowerups(float playerHeight)
+	{
+		if (playerHeight > powerupSpawnedUpTo + nextPowerUpCheck) 
+		{		
+			float y = playerHeight + Random.Range(5.6f, 9.5f);
+			float x = Random.Range(-0.8f, 0.8f);
+			Vector3 pos = new Vector3(x, y, -17.0f);
+			
+			Transform powerup = (Transform) Instantiate(powerupPrefab, pos, Quaternion.identity) ;
+			powerup.name = GetBonus();
+			if (powerup.name.Equals(Constants.FIREBALL_BONUS))
+			{
+				powerup.gameObject.renderer.material.color = Color.red;
+			}
+			else if (powerup.name.Equals(Constants.SUPERBALL_BONUS))
+			{
+				powerup.gameObject.renderer.material.color = Color.blue;
+			}
+			powerupSpawnedUpTo += y;
+		}
+
+	}
+
+	private string GetBonus()
+	{
+		// %60 fireball, %40 superball powerup
+		int randBonus = (int)Random.Range (1, 10);
+		if (randBonus < 6)
 		{
-			nextPlatformCheck = playerTrans.position.y + 10;
-			SpawnPlatforms(nextPlatformCheck + 2);
+			return Constants.FIREBALL_BONUS;
+		}
+		else if (randBonus < 10)
+		{
+			return Constants.SUPERBALL_BONUS;
+		}
+		else{
+			return "";
 		}
 	}
 
@@ -145,6 +309,22 @@ public class Gamer : MonoBehaviour {
 			print("Layer:" + plat.gameObject.layer);
 			defaultLayer = plat.gameObject.layer;
 			plat.gameObject.layer = voidLayer;
+		}
+	}
+
+	public void DisablePlatformsColliders()
+	{
+		for (int i = platforms.Count-1; i>=0; i--) {
+			Transform plat = (Transform)platforms[i];
+			plat.gameObject.GetComponent<Collider>().isTrigger = true;
+		}
+	}
+
+	public void EnablePlatformsColliders()
+	{
+		for (int i = platforms.Count-1; i>=0; i--) {
+			Transform plat = (Transform)platforms[i];
+			plat.gameObject.GetComponent<Collider>().isTrigger = false;
 		}
 	}
 
@@ -161,7 +341,7 @@ public class Gamer : MonoBehaviour {
 				for (int i = platforms.Count-1; i>=0; i--) 
 				{
 						Transform plat = (Transform)platforms [i];
-						planeTrans = GameObject.FindGameObjectWithTag ("Respawn").transform;
+						planeTrans = GameObject.FindGameObjectWithTag (Constants.TAG_PLANE).transform;
 						if (plat == null)
 						{
 								platforms.RemoveAt (i);

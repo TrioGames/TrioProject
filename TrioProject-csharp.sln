@@ -5,6 +5,8 @@ Project("{E730E770-AA86-7CDE-21D5-13C4F1CBF110}") = "TrioProject", "Assembly-CSh
 EndProject
 Project("{E730E770-AA86-7CDE-21D5-13C4F1CBF110}") = "TrioProject", "Assembly-CSharp-vs.csproj", "{518E3E24-D95E-202B-EA7A-00F9DD423E86}"
 EndProject
+Project("{E730E770-AA86-7CDE-21D5-13C4F1CBF110}") = "TrioProject", "Assembly-CSharp-Editor-vs.csproj", "{0592C43D-8264-488C-70D6-DEDFAB2A1CCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,11 +21,15 @@ Global
 		{518E3E24-D95E-202B-EA7A-00F9DD423E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{518E3E24-D95E-202B-EA7A-00F9DD423E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{518E3E24-D95E-202B-EA7A-00F9DD423E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0592C43D-8264-488C-70D6-DEDFAB2A1CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0592C43D-8264-488C-70D6-DEDFAB2A1CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0592C43D-8264-488C-70D6-DEDFAB2A1CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0592C43D-8264-488C-70D6-DEDFAB2A1CCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																							GlobalSection(MonoDevelopProperties) = preSolution
+																																						GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-//using UnityEngine.UI;
+using UnityEngine.UI;
 
 public class BallBehaviour : MonoBehaviour {
 	public AudioSource ses1;
 	public GUIText CountText;
-	public TextMesh PointText;
-	public static float max_height = 0;
+	public Text PointText;
+	public int max_height = 0;
 	private int count = 0;
 	public float maxSpeed = 8;
 	// Use this for initialization
@@ -16,7 +16,12 @@ public class BallBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (gameObject.transform.position.y > max_height) {
-			max_height = gameObject.transform.position.y;
+			max_height = (int) gameObject.transform.position.y / 10;
+			if (Gamer.instance.boostTimer > 0)
+				CountText.text = ((int) Gamer.instance.boostTimer).ToString();
+			else 
+				CountText.text = "";
+			PointText.text = max_height.ToString();
 		}
 	}
 
@@ -31,8 +36,8 @@ public class BallBehaviour : MonoBehaviour {
 			//rigidbody.velocity = new Vector3(xSpeed , 10, rigidbody.velocity.z); 
 			ses1.Play();
 			count++;
-			PointText.text = count.ToString();
-			CountText.text = "Points: " + count.ToString();
+			//PointText.text = max_height;
+			//CountText.text = max_height;
 		}
 
 		if (col.gameObject.name == "RespawnPlane")
@@ -44,9 +49,18 @@ public class BallBehaviour : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col)
 	{
-		if (col.gameObject.name == "Boost Bonus") {
-			print ("Platforms have been disabled");
-			Gamer.instance.DisablePlatforms4BoostedBall();
+		//test print
+		if (col.gameObject.tag.Equals (Constants.TAG_BONUS)) {
+			//print ("BONUS: " + col.gameObject.name);
+		}
+			
+		if (col.gameObject.name.Equals(Constants.FIREBALL_BONUS)) {
+			Gamer.instance.EnableFireballMode (Constants.FIREBALL_TIMER_INIT);
+		}
+		else if (col.gameObject.name.Equals(Constants.SUPERBALL_BONUS))
+		{
+			Gamer.instance.EnableFireballMode (Constants.SUPERBALL_TIMER_INIT);
+			rigidbody.velocity = new Vector3(rigidbody.velocity.x, Constants.SUPERBALL_SPEED_CONST , rigidbody.velocity.z); 
 		}
 	}
 
