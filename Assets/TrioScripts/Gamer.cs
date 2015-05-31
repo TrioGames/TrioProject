@@ -3,20 +3,27 @@ using System.Collections;
 
 public class Gamer : MonoBehaviour {
 
-	public Transform platformPrefab;
-	public Transform powerupPrefab;
+
 	private Transform playerTrans;
 	private Transform planeTrans;
 	public GameObject obj1;
 	public GameObject obj2;
 	public GameObject obj3;
 	public Transform platWarning;
+	private Vector3 objInitPos = new Vector3 (0.0f, -10.0f , 0.0f);
 	private Vector3 obj1Pos = new Vector3 (-0.6f, -0.48f , -17.2f);
 	private Vector3 obj2Pos = new Vector3 (-0.035f , -0.48f, -17.2f);
 	private Vector3 obj3Pos = new Vector3 (0.584f , -0.48f, -17.2f);
 	public float objScale = 0.75f;
 	private int defaultLayer = 0;
 	private int voidLayer;
+	
+	//prefabs
+	public Transform platformPrefab;
+	public Transform powerupPrefab;
+	public GameObject starPrefab;
+	public GameObject concavePrefab;
+	public GameObject prismPrefab;
 
 	//platform variables
 //	private float platformsSpawnedUpTo = 0.0f;
@@ -40,6 +47,7 @@ public class Gamer : MonoBehaviour {
 	void Start () {
 
 		//PlatformWarning.enabled = false;	
+		Score.instance.Count = 0;
 
 		obj1 = GetRandomObject ();
 		obj1.transform.position = obj1Pos;
@@ -72,23 +80,26 @@ public class Gamer : MonoBehaviour {
 		switch (caseSwitch)
 		{
 		case 0:
-			obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			obj.name = "Cube";
+			obj = Instantiate(starPrefab, objInitPos, Quaternion.identity) as GameObject;
+			//obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			obj.name = "Star";
 			break;
 		case 1:
-			obj = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-			obj.name = "Cylinder";
+			obj = Instantiate(concavePrefab, objInitPos, Quaternion.identity) as GameObject;
+			//obj = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+			obj.name = "Concave";
 			break;
 		case 2:
-			obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-			obj.name = "Sphere";
+			obj = Instantiate(prismPrefab, objInitPos, Quaternion.identity) as GameObject;
+			//obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			obj.name = "Prism";
 			break;
 		default:
 			obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
 			obj.name = "Plane";
 			break;
 		}
-		int randomAngle = (int) Random.Range(-180, 180);
+		int randomAngle = (int) Random.Range(0, 8) * 45;
 		var rot = transform.rotation;
 		obj.transform.rotation = rot * Quaternion.Euler(0, 0, randomAngle); 
 		obj.tag = "TrioObject";
@@ -141,7 +152,8 @@ public class Gamer : MonoBehaviour {
 		if (plat != null) {
 			//PlatformWarning.transform.position = new Vector3(plat.position.x , PlatformWarning.transform.position.y , PlatformWarning.transform.position.z );
 			//PlatformWarning.enabled = true;
-			platWarning.position = new Vector3(plat.position.x , platWarning.position.y , platWarning.position.z );
+			Vector3 newPos = new Vector3(plat.position.x , platWarning.position.y , platWarning.position.z );
+			platWarning.position = Vector3.MoveTowards(platWarning.position , newPos, 5 * Time.deltaTime);
 			//print ((int)PlatformWarning.transform.position.x + "," + (int)PlatformWarning.transform.position.y);
 		}
 		else 
@@ -173,8 +185,8 @@ public class Gamer : MonoBehaviour {
 		//return (Transform) platforms [nearestIndex];
 		if (platformsNearby)
 		{
-			print(s);
-			print ("Nearest : " + "(" + ((Transform) platforms[nearestIndex]).position.x.ToString("0.0") + "," +  ((Transform)platforms[nearestIndex]).position.y.ToString("0.0")  + ")");
+			//print(s);
+			//print ("Nearest : " + "(" + ((Transform) platforms[nearestIndex]).position.x.ToString("0.0") + "," +  ((Transform)platforms[nearestIndex]).position.y.ToString("0.0")  + ")");
 			return (Transform) platforms [nearestIndex];
 		}
 		else 

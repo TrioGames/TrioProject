@@ -36,11 +36,11 @@ public class ObjectBehavior : MonoBehaviour {
 	{
 		gameObject.name = "Destroyed" + gameObject.name;
 		DestroyObject (gameObject);	
+
 	}
 
 	void OnTriggerEnter(Collider col)
 	{
-		print ("OnTrigger");
 		if (col.gameObject.name.Equals("RockBottomPlane")) {
 			DestroyObject (gameObject);	
 		}

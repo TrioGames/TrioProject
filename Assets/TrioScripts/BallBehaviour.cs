@@ -5,24 +5,29 @@ using UnityEngine.UI;
 public class BallBehaviour : MonoBehaviour {
 	public AudioSource ses1;
 	public GUIText CountText;
-	public Text PointText;
 	public int max_height = 0;
 	private int count = 0;
 	public float maxSpeed = 8;
 	// Use this for initialization
+
+	public static int score;
 	void Start () {
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (gameObject.transform.position.y > max_height) {
-			max_height = (int) gameObject.transform.position.y / 10;
-			if (Gamer.instance.boostTimer > 0)
-				CountText.text = ((int) Gamer.instance.boostTimer).ToString();
-			else 
-				CountText.text = "";
-			PointText.text = max_height.ToString();
+
+		//highscore count
+		float curHeight = gameObject.transform.position.y;
+		if (curHeight > max_height) {
+			max_height = (int) curHeight / 10;
 		}
+
+		//booster count
+		if (Gamer.instance.boostTimer > 0)
+			CountText.text = ((int) Gamer.instance.boostTimer).ToString();
+		else 
+			CountText.text = "";
 	}
 
 	void OnCollisionEnter(Collision col)
@@ -43,9 +48,11 @@ public class BallBehaviour : MonoBehaviour {
 		if (col.gameObject.name == "RespawnPlane")
 		{
 			//print("Game Over");
+			//Score.instance.StoreHighScore();
 			Application.LoadLevel (0);
 		}
 	}
+	
 
 	void OnTriggerEnter(Collider col)
 	{

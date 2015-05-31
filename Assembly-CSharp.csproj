@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{7C49712F-EDBA-348A-FB3B-44D9F0B4030F}</ProjectGuid>
+	<ProjectGuid>{518E3E24-D95E-202B-EA7A-00F9DD423E86}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -53,8 +53,10 @@
      <Compile Include="Assets\TrioScripts\ObjectBehavior.cs" />
      <Compile Include="Assets\TrioScripts\PlatformBehaviour.cs" />
      <Compile Include="Assets\TrioScripts\PowerupBehaviour.cs" />
+     <Compile Include="Assets\TrioScripts\Score.cs" />
      <Compile Include="Assets\TrioScripts\backgroundScrolling.cs" />
      <Compile Include="Assets\TrioScripts\destroyobject.cs" />
+     <Compile Include="Assets\TrioScripts\mainMenuButtons.cs" />
      <Compile Include="Assets\TrioScripts\mouseDrag.cs" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Multiply Culled.shader" />
      <None Include="Assets\Standard Assets\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
@@ -78,9 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{0E3266DC-01A2-B4E7-73EA-43DF2CFEBA60}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+      <Project>{1344CA20-DA23-A209-34EA-EF0714AABF1F}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{46549461-E6A8-EAFB-BF4B-93F2BB529C6F}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
+      <Project>{541E1127-5B6C-ED4C-0D55-E52172D82A2F}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
