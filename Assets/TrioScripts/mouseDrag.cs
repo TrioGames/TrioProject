@@ -14,5 +14,8 @@ public class mouseDrag : MonoBehaviour {
 		transform.position = objPosition;
 		Destroy(transform.collider);
 		gameObject.AddComponent<MeshCollider>();
+
+		if (Gamer.instance.GameStatus == Constants.GAME_STATUS_PAUSE)
+			Gamer.instance.StartGame ();
 	}
 }

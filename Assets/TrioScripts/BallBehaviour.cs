@@ -8,6 +8,8 @@ public class BallBehaviour : MonoBehaviour {
 	public int max_height = 0;
 	private int count = 0;
 	public float maxSpeed = 8;
+	public Text HighScore;
+	public TextMesh tm;
 	// Use this for initialization
 
 	public static int score;
@@ -48,8 +50,19 @@ public class BallBehaviour : MonoBehaviour {
 		if (col.gameObject.name == "RespawnPlane")
 		{
 			//print("Game Over");
-			//Score.instance.StoreHighScore();
-			Application.LoadLevel (0);
+			Score.instance.StoreHighScore();
+			//TextMesh theText = (TextMesh) GameObject.Find("highscoretext").GetComponent(typeof(TextMesh));
+//			TextMesh theText = GameObject.Find("highscoretext").GetComponent<TextMesh>();
+//			theText.text = "osman";
+			//GetComponent<Text>().text = Score.instance.GetHighScore().ToString();
+//			GameObject tm = GameObject.Find ("highscoretext");
+//			TextMesh mt = tm.GetComponent(typeof(TextMesh));
+//			print ("isnull" + mt==null);
+
+			// here we change the value of displayed text
+			//tm.text = "new Text u want to see";
+			Application.LoadLevel ("MenuScene");
+
 		}
 	}
 	
@@ -68,6 +81,10 @@ public class BallBehaviour : MonoBehaviour {
 		{
 			Gamer.instance.EnableFireballMode (Constants.SUPERBALL_TIMER_INIT);
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, Constants.SUPERBALL_SPEED_CONST , rigidbody.velocity.z); 
+		}
+		else if (col.gameObject.name.Equals(Constants.GRAVITY_BONUS))
+		{
+			Gamer.instance.EnableLowGravityMode ();
 		}
 	}
 

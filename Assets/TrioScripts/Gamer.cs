@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class Gamer : MonoBehaviour {
-
-
+	
 	private Transform playerTrans;
 	private Transform planeTrans;
 	public GameObject obj1;
@@ -17,6 +16,7 @@ public class Gamer : MonoBehaviour {
 	public float objScale = 0.75f;
 	private int defaultLayer = 0;
 	private int voidLayer;
+	public int GameStatus = Constants.GAME_STATUS_PAUSE;
 	
 	//prefabs
 	public Transform platformPrefab;
@@ -39,6 +39,9 @@ public class Gamer : MonoBehaviour {
 
 	//public GUIText PlatformWarning;
 	public float boostTimer = -1;
+	//public float gravityTimer = -1;
+
+	public bool LowGravityMode;
 
 	//for singleton
 	public static Gamer instance { get; private set; }
@@ -46,7 +49,10 @@ public class Gamer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		//PlatformWarning.enabled = false;	
+		PauseGame ();
+
+		DisableLowGravityMode ();
+
 		Score.instance.Count = 0;
 
 		obj1 = GetRandomObject ();
@@ -57,20 +63,46 @@ public class Gamer : MonoBehaviour {
 
 		obj3 = GetRandomObject ();
 		obj3.transform.position = obj3Pos;
+
+
+	}
+
+	void DisableLowGravityMode()
+	{
+		LowGravityMode = false;
+		ballMode = Constants.NORMAL_MODE;
+		Physics.gravity = new Vector3 (0, Constants.GRAVITY_DEFAULT, 0);
+		boostTimer = -1;
+	}
+
+	public void EnableLowGravityMode()
+	{
+		LowGravityMode = true;
+		ballMode = Constants.GRAVITY_MODE;
+		Physics.gravity = new Vector3 (0, Constants.GRAVITY_LOW, 0);
+		boostTimer = Constants.GRAVITY_TIMER;
 	}
 
 	void Awake () {
+		voidLayer = LayerMask.NameToLayer( "Void" );
 		instance = this;
 		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
 		platforms = new ArrayList();
 		//SpawnPlatforms(2.0f);
 		StartGame();
 	}
+
 	
-	void StartGame()
+	public void StartGame()
 	{
-		voidLayer = LayerMask.NameToLayer( "Void" );
+		GameStatus = Constants.GAME_STATUS_RUN;
 		Time.timeScale = 1.0f;
+	}
+
+	public void PauseGame()
+	{
+		GameStatus = Constants.GAME_STATUS_PAUSE;
+		Time.timeScale = 0.0f;
 	}
 
 	GameObject GetRandomObject()
@@ -132,10 +164,7 @@ public class Gamer : MonoBehaviour {
 			//print ("obj3 is : " + obj3.name);
 		}
 	}
-
-
-
-
+	
 	// Update is called once per frame
 	void Update () {
 		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
@@ -143,6 +172,7 @@ public class Gamer : MonoBehaviour {
 		RecreateMissingObject ();
 		MaintainPlatforms (playerHeight);
 		MaintainPowerups (playerHeight);
+		SpawnPowerups (playerHeight);
 		Warn4ComingPlatforms (playerHeight);
 	}
 
@@ -204,8 +234,14 @@ public class Gamer : MonoBehaviour {
 				EnablePlatformsColliders();
 			}
 		}
-		
-		SpawnPowerups (playerHeight);
+		else if (ballMode == Constants.GRAVITY_MODE)
+		{
+			boostTimer -= Time.deltaTime;
+			if (boostTimer < 0)
+			{
+				DisableLowGravityMode();
+			}
+		}
 	}
 
 	private void MaintainPlatforms(float playerHeight)
@@ -222,7 +258,7 @@ public class Gamer : MonoBehaviour {
 		float spawnHeight = downTo;
 		while (spawnHeight <= upTo) 
 		{
-			spawnHeight += Random.Range(10.0f, 20.0f);
+			spawnHeight += Random.Range(5.0f, 20.0f);
 			float x = Random.Range(-0.8f, 0.8f);
 			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
 			
@@ -292,6 +328,10 @@ public class Gamer : MonoBehaviour {
 			{
 				powerup.gameObject.renderer.material.color = Color.blue;
 			}
+			else if (powerup.name.Equals(Constants.GRAVITY_BONUS))
+			{
+				powerup.gameObject.renderer.material.color = Color.green;
+			}
 			powerupSpawnedUpTo += y;
 		}
 
@@ -299,15 +339,19 @@ public class Gamer : MonoBehaviour {
 
 	private string GetBonus()
 	{
-		// %60 fireball, %40 superball powerup
-		int randBonus = (int)Random.Range (1, 10);
-		if (randBonus < 6)
+		// %60 fireball, %20 superball powerup, %20 gravitiy
+		int randBonus = (int)Random.Range (1, 11);
+		if (randBonus < 7)
 		{
 			return Constants.FIREBALL_BONUS;
 		}
-		else if (randBonus < 10)
+		else if (randBonus < 9)
 		{
 			return Constants.SUPERBALL_BONUS;
+		}
+		else if (randBonus < 11)
+		{
+			return Constants.GRAVITY_BONUS;
 		}
 		else{
 			return "";

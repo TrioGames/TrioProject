@@ -15,6 +15,7 @@ public class mainMenuButtons : MonoBehaviour {
 
 	public void StartGame () {
 		Application.LoadLevel ("GameScene");
+		Gamer.instance.PauseGame ();
 	}
 
 	public void ExitGame () {
@@ -23,12 +24,12 @@ public class mainMenuButtons : MonoBehaviour {
 	}
 
 	public void PauseGame () {
-		Time.timeScale = 0;
+		Gamer.instance.PauseGame ();
 		menu.SetActive(true);
 	}
 
 	public void ResumeGame () {
-		Time.timeScale = 1;
+		Gamer.instance.StartGame ();
 		menu.SetActive(false);
 	}
 }
