@@ -3,11 +3,18 @@ guid: 81084fc83064f45b7be1acc256cfcf2d
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
-  - platformPrefab: {fileID: 400000, guid: a04701fd2f0e5448aabfda9eecc67fef, type: 2}
-  - powerupPrefab: {fileID: 400000, guid: 2b69460baebc54736b85e447f5e674e4, type: 2}
   - obj1: {instanceID: 0}
   - obj2: {instanceID: 0}
   - obj3: {instanceID: 0}
+  - platWarning: {instanceID: 0}
+  - platformPrefab: {fileID: 400000, guid: a04701fd2f0e5448aabfda9eecc67fef, type: 2}
+  - powerupPrefab: {fileID: 400000, guid: 2b69460baebc54736b85e447f5e674e4, type: 2}
+  - starPrefab: {instanceID: 0}
+  - concavePrefab: {instanceID: 0}
+  - prismPrefab: {instanceID: 0}
+  - Teapotprefab: {instanceID: 0}
+  - Pyramidprefab: {instanceID: 0}
+  - Treeprefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

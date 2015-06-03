@@ -1,0 +1,8 @@
+ # Files to ignore
+ *.csproj
+ *.sln
+ *.pidb
+ *.userprefs
+ Library/
+ Temp/
+ .DS_Store

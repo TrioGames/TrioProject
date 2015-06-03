@@ -29,7 +29,7 @@ public class backgroundScrolling : MonoBehaviour {
 				ScoreMesh.text = Score.instance.Count.ToString();
 				if (Score.instance.Count == oldScore + 1)
 				{
-					NewHighscoreMsg.text = "New Record!";
+					NewHighscoreMsg.text = "New Record";
 				}
 				else if(Score.instance.Count > oldScore + 1)
 				{

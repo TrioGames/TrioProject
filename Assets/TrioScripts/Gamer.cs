@@ -63,6 +63,8 @@ public class Gamer : MonoBehaviour {
 
 		Score.instance.Start();
 
+		Score.instance.ResetHighScore (5);
+
 		gameLevel = 0;
 
 		obj1 = GetRandomObject ();
@@ -299,12 +301,8 @@ public class Gamer : MonoBehaviour {
 		float spawnHeight = downTo;
 		while (spawnHeight <= upTo) 
 		{
-
 			spawnLowerLimit = spawnHeightArray[gameLevel, 0];
 			spawnHigherLimit = spawnHeightArray[gameLevel, 1];
-
-			print ("Level: " + gameLevel);
-			print ("(" +spawnLowerLimit + "," + spawnHigherLimit + ")");
 			spawnHeight += Random.Range(spawnLowerLimit, spawnHigherLimit);
 			float x = Random.Range(-0.8f, 0.8f);
 			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
