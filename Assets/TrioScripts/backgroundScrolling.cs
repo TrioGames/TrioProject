@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class backgroundScrolling : MonoBehaviour {
 
-	public float Speed;
+	public float Speedasd;
 
 	public TextMesh ScoreMesh;
+
+	public TextMesh NewHighscoreMsg;
 	
-	float height;
+	int oldScore;
 	
 	void Start()
 	{
-
+		oldScore = Score.instance.GetHighScore();
 	}
 	// Update is called once per frame
 	void Update () 
@@ -22,7 +25,17 @@ public class backgroundScrolling : MonoBehaviour {
 			transform.position = new Vector3 (transform.position.x, transform.position.y + 12f, transform.position.z);
 			Score.instance.Count++;
 			if (Score.instance.Count != 0)
+			{
 				ScoreMesh.text = Score.instance.Count.ToString();
+				if (Score.instance.Count == oldScore + 1)
+				{
+					NewHighscoreMsg.text = "New Record!";
+				}
+				else if(Score.instance.Count > oldScore + 1)
+				{
+					NewHighscoreMsg.text = "";
+				}
+			}
 		}
 	}
 }

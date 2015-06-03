@@ -1,11 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class mainMenuButtons : MonoBehaviour {
 	public GameObject menu;
+	public GameObject resumeText;
+	public GameObject pauseButton;
+	public GameObject perde;
+	public static mainMenuButtons instance { get; private set; }
+
+	public Text Skor;
 	// Use this for initialization
 	void Start () {
-	
+		instance = this;
+		UpdateScoreBoard ();
+	}
+
+	public void UpdateScoreBoard()
+	{
+		if (null != Skor)
+			Skor.text = "HIGHSCORE: " + Score.instance.GetHighScore().ToString();
 	}
 	
 	// Update is called once per frame
@@ -16,20 +30,29 @@ public class mainMenuButtons : MonoBehaviour {
 	public void StartGame () {
 		Application.LoadLevel ("GameScene");
 		Gamer.instance.PauseGame ();
+
 	}
 
 	public void ExitGame () {
-		//Application.Quit ();
+		Application.Quit ();
 		Application.LoadLevel ("MenuScene");
 	}
 
 	public void PauseGame () {
 		Gamer.instance.PauseGame ();
-		menu.SetActive(true);
+		float newScore = perde.transform.position.y + 1.71f;
+		resumeText.transform.position = new Vector3 (resumeText.transform.position.x, newScore, resumeText.transform.position.z);
+		resumeText.SetActive (true);
+		pauseButton.SetActive (false);
+		//menu.SetActive(true);
+	}
+	public void ActivatePauseButton() {
+		pauseButton.SetActive (true);
 	}
 
 	public void ResumeGame () {
-		Gamer.instance.StartGame ();
+		pauseButton.SetActive (true);
 		menu.SetActive(false);
+		Gamer.instance.StartGame ();
 	}
 }

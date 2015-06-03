@@ -1,19 +1,5 @@
 #Things to do
 
-#1-2 haziran
-1. objeler yapliacak.
-2. highscore fixlenecek
-3. menu buttonlari duzenlenecek
-4. ustteki ucgen guzellestirilecek
-5. buff aldiginda guzellesmeler yapilacak
-6. pauselaninca cisimler hareket etmeyecek
-7. bufflara sekiller eklenebilir
-8. exit buttonu fonksiyonu eklenecek
-9. creditse biseyler yazilacak
-10. surukleme hizi topu ekleyebilir mi
-11. arkaplan animasyonu saglanacak
-
-
 #9 mayis
 1. bug fix
 objelerin tiklayinca yeniden gelmemesi

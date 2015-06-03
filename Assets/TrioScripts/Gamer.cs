@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Gamer : MonoBehaviour {
 	
+
+	
 	private Transform playerTrans;
 	private Transform planeTrans;
 	public GameObject obj1;
@@ -24,6 +26,8 @@ public class Gamer : MonoBehaviour {
 	public GameObject starPrefab;
 	public GameObject concavePrefab;
 	public GameObject prismPrefab;
+	public GameObject Teapotprefab;
+	public GameObject Pyramidprefab;
 
 	//platform variables
 //	private float platformsSpawnedUpTo = 0.0f;
@@ -43,17 +47,23 @@ public class Gamer : MonoBehaviour {
 
 	public bool LowGravityMode;
 
+	// top yukseldikce platformlar daha sik geliyor
+	private readonly float[,] spawnHeightArray  = new float[3,2] { {8.0f, 20.0f}, {5.0f, 12f}, {4.0f,8.0f} };
+	private int gameLevel; //0-1-2 olabilir
+
+
 	//for singleton
 	public static Gamer instance { get; private set; }
 
 	// Use this for initialization
 	void Start () {
-
 		PauseGame ();
 
 		DisableLowGravityMode ();
 
-		Score.instance.Count = 0;
+		Score.instance.Start();
+
+		gameLevel = 0;
 
 		obj1 = GetRandomObject ();
 		obj1.transform.position = obj1Pos;
@@ -102,12 +112,20 @@ public class Gamer : MonoBehaviour {
 	public void PauseGame()
 	{
 		GameStatus = Constants.GAME_STATUS_PAUSE;
+		mainMenuButtons.instance.UpdateScoreBoard();
+		Time.timeScale = 0.0f;
+	}
+
+	public void EndGame()
+	{
+		GameStatus = Constants.GAME_STATUS_END;
+		mainMenuButtons.instance.UpdateScoreBoard();
 		Time.timeScale = 0.0f;
 	}
 
 	GameObject GetRandomObject()
 	{
-		int caseSwitch = Random.Range (0,3);
+		int caseSwitch = Random.Range (0,5);
 		GameObject obj;
 		switch (caseSwitch)
 		{
@@ -125,6 +143,16 @@ public class Gamer : MonoBehaviour {
 			obj = Instantiate(prismPrefab, objInitPos, Quaternion.identity) as GameObject;
 			//obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			obj.name = "Prism";
+			break;
+		case 3:
+			obj = Instantiate(Teapotprefab, objInitPos, Quaternion.identity) as GameObject;
+			//obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			obj.name = "Teapot";
+			break;
+		case 4:
+			obj = Instantiate(Pyramidprefab, objInitPos, Quaternion.identity) as GameObject;
+			//obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			obj.name = "Pyramid";
 			break;
 		default:
 			obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -170,10 +198,21 @@ public class Gamer : MonoBehaviour {
 		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
 		float playerHeight = playerTrans.position.y;
 		RecreateMissingObject ();
+		IncreaseGameDifficulty (playerHeight);
 		MaintainPlatforms (playerHeight);
 		MaintainPowerups (playerHeight);
 		SpawnPowerups (playerHeight);
 		Warn4ComingPlatforms (playerHeight);
+	}
+
+	private void IncreaseGameDifficulty(float playerHeight)
+	{
+		if (playerHeight > 60)
+			gameLevel = 2;
+		else if (playerHeight > 30)
+			gameLevel = 1;
+		else 
+			gameLevel = 0;
 	}
 
 	private void Warn4ComingPlatforms(float playerHeight)
@@ -255,10 +294,18 @@ public class Gamer : MonoBehaviour {
 
 	void SpawnPlatforms(float downTo, float upTo)
 	{
+		float spawnLowerLimit = 4.0f;
+		float spawnHigherLimit = 18.0f;
 		float spawnHeight = downTo;
 		while (spawnHeight <= upTo) 
 		{
-			spawnHeight += Random.Range(5.0f, 20.0f);
+
+			spawnLowerLimit = spawnHeightArray[gameLevel, 0];
+			spawnHigherLimit = spawnHeightArray[gameLevel, 1];
+
+			print ("Level: " + gameLevel);
+			print ("(" +spawnLowerLimit + "," + spawnHigherLimit + ")");
+			spawnHeight += Random.Range(spawnLowerLimit, spawnHigherLimit);
 			float x = Random.Range(-0.8f, 0.8f);
 			Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
 			

@@ -17,13 +17,16 @@ public class Score : MonoBehaviour {
 	public void StoreHighScore()
 	{
 		int oldHighScore = PlayerPrefs.GetInt ("highscore", 0);
-		print ("OldScore : " + oldHighScore);
-		if (Count > oldHighScore) {
-			print ("22222");
-			PlayerPrefs.SetInt ("highscore", Count);
+		if (Count -1 > oldHighScore) {
+			PlayerPrefs.SetInt ("highscore", Count - 1);
 			PlayerPrefs.Save ();
-			print ("NewHighScore : " + Count);
 		}
+	}
+
+	public void ResetHighScore(int i)
+	{
+		PlayerPrefs.SetInt ("highscore", i);
+		PlayerPrefs.Save ();
 	}
 
 	public int GetHighScore()
@@ -32,7 +35,7 @@ public class Score : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		Count = 0;
 	}
 

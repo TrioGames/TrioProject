@@ -39,6 +39,8 @@ public class Constants : MonoBehaviour {
 
 	public const float HEIGHT_NO_PLATFORM = 8.0f;
 
+	public const int GAME_STATUS_END = 2;
+
 	public const int GAME_STATUS_RUN = 1;
 
 	public const int GAME_STATUS_PAUSE = 0;

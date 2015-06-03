@@ -49,20 +49,8 @@ public class BallBehaviour : MonoBehaviour {
 
 		if (col.gameObject.name == "RespawnPlane")
 		{
-			//print("Game Over");
 			Score.instance.StoreHighScore();
-			//TextMesh theText = (TextMesh) GameObject.Find("highscoretext").GetComponent(typeof(TextMesh));
-//			TextMesh theText = GameObject.Find("highscoretext").GetComponent<TextMesh>();
-//			theText.text = "osman";
-			//GetComponent<Text>().text = Score.instance.GetHighScore().ToString();
-//			GameObject tm = GameObject.Find ("highscoretext");
-//			TextMesh mt = tm.GetComponent(typeof(TextMesh));
-//			print ("isnull" + mt==null);
-
-			// here we change the value of displayed text
-			//tm.text = "new Text u want to see";
 			Application.LoadLevel ("MenuScene");
-
 		}
 	}
 	
