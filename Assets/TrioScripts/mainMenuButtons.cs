@@ -7,13 +7,17 @@ public class mainMenuButtons : MonoBehaviour {
 	public GameObject resumeText;
 	public GameObject pauseButton;
 	public GameObject perde;
+	public GameObject CreditsMenu;
 	public static mainMenuButtons instance { get; private set; }
 
 	public Text Skor;
 	// Use this for initialization
 	void Start () {
-		instance = this;
 		UpdateScoreBoard ();
+	}
+
+	void Awake(){
+		instance = this;
 	}
 
 	public void UpdateScoreBoard()
@@ -30,11 +34,22 @@ public class mainMenuButtons : MonoBehaviour {
 	public void StartGame () {
 		Application.LoadLevel ("GameScene");
 		Gamer.instance.PauseGame ();
-
 	}
 
 	public void ExitGame () {
 		Application.Quit ();
+		Application.LoadLevel ("MenuScene");
+	}
+
+	public void DisplayCredits () {
+		menu.SetActive (false);
+		CreditsMenu.SetActive (true);
+	}
+
+	public void BackToMenu()
+	{
+//		CreditsMenu.SetActive (false);
+//		menu.SetActive (true);
 		Application.LoadLevel ("MenuScene");
 	}
 

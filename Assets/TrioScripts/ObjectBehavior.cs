@@ -35,8 +35,8 @@ public class ObjectBehavior : MonoBehaviour {
 	void OnCollisionEnter(Collision col)
 	{
 		gameObject.name = "Destroyed" + gameObject.name;
-		DestroyObject (gameObject);	
-
+		//DestroyObject (gameObject, 0.1f);	
+		DestroyObject (gameObject);
 	}
 
 	void OnTriggerEnter(Collider col)

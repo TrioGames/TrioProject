@@ -3,7 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class BallBehaviour : MonoBehaviour {
-	public AudioSource ses1;
+	public AudioSource JumpSound;
+	public AudioSource DeathSound;
 	public GUIText CountText;
 	public int max_height = 0;
 	private int count = 0;
@@ -11,6 +12,8 @@ public class BallBehaviour : MonoBehaviour {
 	public Text HighScore;
 	public TextMesh tm;
 	// Use this for initialization
+
+	public AudioSource PowerupSound;
 
 	public static int score;
 	void Start () {
@@ -39,35 +42,48 @@ public class BallBehaviour : MonoBehaviour {
 			float xSpeed = rigidbody.velocity.x;
 			float ySpeed = Mathf.Abs(rigidbody.velocity.y);
 			float cons = maxSpeed / Mathf.Sqrt( (xSpeed * xSpeed) + (ySpeed * ySpeed) );
-			rigidbody.velocity = new Vector3(xSpeed * cons, (ySpeed * cons) + 5 , rigidbody.velocity.z); 
-			//rigidbody.velocity = new Vector3(xSpeed , 10, rigidbody.velocity.z); 
-			ses1.Play();
+			rigidbody.velocity = new Vector3(xSpeed * cons, (ySpeed * cons) + 5 , rigidbody.velocity.z);
+			JumpSound.Play();
 			count++;
-			//PointText.text = max_height;
-			//CountText.text = max_height;
 		}
 
 		if (col.gameObject.name == "RespawnPlane")
 		{
+			DeathSound.Play();
+			//DontDestroyOnLoad(DeathSound);
 			Score.instance.StoreHighScore();
 			Application.LoadLevel ("MenuScene");
 		}
+	}
+
+	IEnumerator wait(float f)
+	{
+		//Do whatever you need done here before waiting
+		
+		yield return new WaitForSeconds (2f);
+		
+		//do stuff after the 2 seconds
 	}
 	
 
 	void OnTriggerEnter(Collider col)
 	{
-		//test print
-		if (col.gameObject.tag.Equals (Constants.TAG_BONUS)) {
-			//print ("BONUS: " + col.gameObject.name);
+
+		if (col.gameObject.tag.Equals (Constants.TAG_PLATFORM)) {
+			JumpSound.Play();
+		}
+		else if (col.gameObject.tag.Equals (Constants.TAG_BONUS))
+		{
+			PowerupSound.Play();
 		}
 			
-		if (col.gameObject.name.Equals(Constants.FIREBALL_BONUS)) {
-			Gamer.instance.EnableFireballMode (Constants.FIREBALL_TIMER_INIT);
+		if (col.gameObject.name.Equals(Constants.FIREBALL_BONUS)) 
+		{
+			Gamer.instance.EnableFireballMode (Constants.FIREBALL_TIMER_INIT, Constants.FIREBALL_BONUS);
 		}
 		else if (col.gameObject.name.Equals(Constants.SUPERBALL_BONUS))
 		{
-			Gamer.instance.EnableFireballMode (Constants.SUPERBALL_TIMER_INIT);
+			Gamer.instance.EnableFireballMode (Constants.SUPERBALL_TIMER_INIT, Constants.SUPERBALL_BONUS );
 			rigidbody.velocity = new Vector3(rigidbody.velocity.x, Constants.SUPERBALL_SPEED_CONST , rigidbody.velocity.z); 
 		}
 		else if (col.gameObject.name.Equals(Constants.GRAVITY_BONUS))

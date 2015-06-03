@@ -7,6 +7,10 @@ MonoImporter:
   - obj2: {instanceID: 0}
   - obj3: {instanceID: 0}
   - platWarning: {instanceID: 0}
+  - lgtb: {fileID: 2100000, guid: 5ed15b3d629913d4a84a61435947759b, type: 2}
+  - red: {fileID: 2100000, guid: 07b7bfbb6583f4426a8821cd895301f3, type: 2}
+  - blue: {fileID: 2100000, guid: f83a0fcf37d1449c78770d85a2fd2009, type: 2}
+  - green: {fileID: 2100000, guid: 07000d2b30534422895acf2c9de8ebc3, type: 2}
   - platformPrefab: {fileID: 400000, guid: a04701fd2f0e5448aabfda9eecc67fef, type: 2}
   - powerupPrefab: {fileID: 400000, guid: 2b69460baebc54736b85e447f5e674e4, type: 2}
   - starPrefab: {instanceID: 0}
@@ -14,7 +18,7 @@ MonoImporter:
   - prismPrefab: {instanceID: 0}
   - Teapotprefab: {instanceID: 0}
   - Pyramidprefab: {instanceID: 0}
-  - Treeprefab: {instanceID: 0}
+  - TreePrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

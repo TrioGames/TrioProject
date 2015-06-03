@@ -4,7 +4,7 @@ using System.Collections;
 public class PlatformBehaviour : MonoBehaviour {
 
 	public GameObject explosionPrefab;
-
+	
 	// Use this for initialization
 	void Start () {
 	

@@ -12,6 +12,10 @@ public class Score : MonoBehaviour {
 		return instance;
 	}
 
+	void Awake()
+	{
+		instance = this;
+	}
 	public int Count;
 	
 	public void StoreHighScore()

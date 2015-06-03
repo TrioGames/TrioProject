@@ -2,9 +2,6 @@
 using System.Collections;
 
 public class Gamer : MonoBehaviour {
-	
-
-	
 	private Transform playerTrans;
 	private Transform planeTrans;
 	public GameObject obj1;
@@ -19,7 +16,11 @@ public class Gamer : MonoBehaviour {
 	private int defaultLayer = 0;
 	private int voidLayer;
 	public int GameStatus = Constants.GAME_STATUS_PAUSE;
-	
+	public Material lgtb;
+	public Material red;
+	public Material blue;
+	public Material green;
+
 	//prefabs
 	public Transform platformPrefab;
 	public Transform powerupPrefab;
@@ -28,6 +29,10 @@ public class Gamer : MonoBehaviour {
 	public GameObject prismPrefab;
 	public GameObject Teapotprefab;
 	public GameObject Pyramidprefab;
+	public GameObject TreePrefab;
+	public Transform fireballPrefab;
+	public Transform superballPrefab;
+	public Transform gravityPrefab;
 
 	//platform variables
 //	private float platformsSpawnedUpTo = 0.0f;
@@ -63,7 +68,7 @@ public class Gamer : MonoBehaviour {
 
 		Score.instance.Start();
 
-		Score.instance.ResetHighScore (5);
+		//Score.instance.ResetHighScore (5);
 
 		gameLevel = 0;
 
@@ -79,11 +84,19 @@ public class Gamer : MonoBehaviour {
 
 	}
 
+	public Gamer GetInstance()
+	{
+		if (instance == null)
+			instance = new Gamer();
+		return instance;
+	}
+
 	void DisableLowGravityMode()
 	{
 		LowGravityMode = false;
 		ballMode = Constants.NORMAL_MODE;
 		Physics.gravity = new Vector3 (0, Constants.GRAVITY_DEFAULT, 0);
+		playerTrans.gameObject.GetComponent<TrailRenderer> ().material = lgtb;
 		boostTimer = -1;
 	}
 
@@ -93,6 +106,13 @@ public class Gamer : MonoBehaviour {
 		ballMode = Constants.GRAVITY_MODE;
 		Physics.gravity = new Vector3 (0, Constants.GRAVITY_LOW, 0);
 		boostTimer = Constants.GRAVITY_TIMER;
+		playerTrans.gameObject.GetComponent<TrailRenderer> ().material = green;
+	}
+
+	private void EnableNormalMode()
+	{
+		DisableFireballMode ();
+		DisableLowGravityMode ();
 	}
 
 	void Awake () {
@@ -127,7 +147,7 @@ public class Gamer : MonoBehaviour {
 
 	GameObject GetRandomObject()
 	{
-		int caseSwitch = Random.Range (0,5);
+		int caseSwitch = Random.Range (0,6);
 		GameObject obj;
 		switch (caseSwitch)
 		{
@@ -155,6 +175,11 @@ public class Gamer : MonoBehaviour {
 			obj = Instantiate(Pyramidprefab, objInitPos, Quaternion.identity) as GameObject;
 			//obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			obj.name = "Pyramid";
+			break;
+		case 5:
+			obj = Instantiate(TreePrefab, objInitPos, Quaternion.identity) as GameObject;
+			//obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+			obj.name = "Tree";
 			break;
 		default:
 			obj = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -264,6 +289,13 @@ public class Gamer : MonoBehaviour {
 			return null;
 	}
 
+	private void DisableFireballMode()
+	{
+		playerTrans.gameObject.GetComponent<TrailRenderer> ().material = lgtb;
+		ballMode = Constants.NORMAL_MODE;
+		EnablePlatformsColliders();
+	}
+
 	private void MaintainPowerups(float playerHeight)
 	{
 		// Update timer of the boost (fireball etc.)
@@ -271,8 +303,7 @@ public class Gamer : MonoBehaviour {
 			boostTimer -= Time.deltaTime;
 			if (boostTimer < 0)
 			{
-				ballMode = Constants.NORMAL_MODE;
-				EnablePlatformsColliders();
+				DisableFireballMode();
 			}
 		}
 		else if (ballMode == Constants.GRAVITY_MODE)
@@ -310,7 +341,7 @@ public class Gamer : MonoBehaviour {
 			Transform plat = (Transform) Instantiate(platformPrefab, pos, Quaternion.identity) ;
 			plat.tag = "Platform";
 			
-			if (ballMode == Constants.NORMAL_MODE){ // normal mode
+			if (ballMode != Constants.FIREBALL_MODE){ // normal mode
 				plat.gameObject.GetComponent<Collider>().isTrigger = false;
 			}
 			else if (ballMode == Constants.FIREBALL_MODE){ // fireball
@@ -348,11 +379,20 @@ public class Gamer : MonoBehaviour {
 //
 //	}
 
-	public void EnableFireballMode(float timer)
+	public void EnableFireballMode(float timer, string bonus)
 	{
+		EnableNormalMode ();
 		DisablePlatformsColliders ();
 		ballMode = Constants.FIREBALL_MODE;
 		boostTimer = timer;
+		if (bonus.Equals(Constants.FIREBALL_BONUS))
+		{
+			playerTrans.gameObject.GetComponent<TrailRenderer> ().material = red;
+		}
+		else if (bonus.Equals(Constants.SUPERBALL_BONUS))
+		{
+			playerTrans.gameObject.GetComponent<TrailRenderer> ().material = blue;
+		}
 	}
 	
 	public void SpawnPowerups(float playerHeight)
@@ -362,20 +402,22 @@ public class Gamer : MonoBehaviour {
 			float y = playerHeight + Random.Range(5.6f, 9.5f);
 			float x = Random.Range(-0.8f, 0.8f);
 			Vector3 pos = new Vector3(x, y, -17.0f);
-			
-			Transform powerup = (Transform) Instantiate(powerupPrefab, pos, Quaternion.identity) ;
-			powerup.name = GetBonus();
-			if (powerup.name.Equals(Constants.FIREBALL_BONUS))
+			string powerupName = GetBonus();
+			if (powerupName.Equals(Constants.FIREBALL_BONUS))
 			{
-				powerup.gameObject.renderer.material.color = Color.red;
+				Transform powerup = (Transform) Instantiate(fireballPrefab, pos, Quaternion.identity) ;
+				powerup.name = powerupName;
 			}
-			else if (powerup.name.Equals(Constants.SUPERBALL_BONUS))
+			else if (powerupName.Equals(Constants.SUPERBALL_BONUS))
 			{
-				powerup.gameObject.renderer.material.color = Color.blue;
+				Transform powerup = (Transform) Instantiate(superballPrefab, pos, Quaternion.identity) ;
+				powerup.name = powerupName;
+				powerup.rotation = powerup.rotation * Quaternion.Euler(90, 0, 180);
 			}
-			else if (powerup.name.Equals(Constants.GRAVITY_BONUS))
+			else if (powerupName.Equals(Constants.GRAVITY_BONUS))
 			{
-				powerup.gameObject.renderer.material.color = Color.green;
+				Transform powerup = (Transform) Instantiate(gravityPrefab, pos, Quaternion.identity) ;
+				powerup.name = powerupName;
 			}
 			powerupSpawnedUpTo += y;
 		}

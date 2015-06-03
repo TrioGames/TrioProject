@@ -50,4 +50,6 @@ public class Constants : MonoBehaviour {
 	public const float GRAVITY_LOW = -1.0f;
 
 	public const float GRAVITY_TIMER = 10;
+
+	public const string TAG_PLATFORM = "Platform";
 }
