@@ -1,14 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/TrioScripts/Gamer.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/TrioScripts/BallBehaviour.cs">
     <Files>
+      <File FileName="Assets/TrioScripts/BallBehaviour.cs" Line="66" Column="3" />
       <File FileName="Assets/TrioScripts/yapilacak isler.txt" Line="1" Column="1" />
-      <File FileName="Assets/TrioScripts/Gamer.cs" Line="334" Column="56" />
-      <File FileName="Assets/TrioScripts/BallBehaviour.cs" Line="64" Column="55" />
-      <File FileName="Assets/TrioScripts/Constants.cs" Line="36" Column="26" />
+      <File FileName="Assets/TrioScripts/Gamer.cs" Line="387" Column="1" />
+      <File FileName="Assets/TrioScripts/Constants.cs" Line="54" Column="48" />
       <File FileName="Assets/TrioScripts/ObjectBehavior.cs" Line="39" Column="28" />
-      <File FileName="Assets/TrioScripts/mainMenuButtons.cs" Line="44" Column="3" />
-      <File FileName="Assets/TrioScripts/Score.cs" Line="8" Column="2" />
+      <File FileName="Assets/TrioScripts/mainMenuButtons.cs" Line="1" Column="1" />
+      <File FileName="Assets/TrioScripts/Score.cs" Line="1" Column="1" />
+      <File FileName="Assets/TrioScripts/PlatformBehaviour.cs" Line="25" Column="1" />
+      <File FileName="Assets/TrioScripts/PowerupBehaviour.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

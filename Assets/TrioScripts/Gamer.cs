@@ -102,6 +102,7 @@ public class Gamer : MonoBehaviour {
 
 	public void EnableLowGravityMode()
 	{
+		EnableNormalMode ();
 		LowGravityMode = true;
 		ballMode = Constants.GRAVITY_MODE;
 		Physics.gravity = new Vector3 (0, Constants.GRAVITY_LOW, 0);
@@ -111,8 +112,21 @@ public class Gamer : MonoBehaviour {
 
 	private void EnableNormalMode()
 	{
-		DisableFireballMode ();
-		DisableLowGravityMode ();
+		if (ballMode == Constants.NORMAL_MODE)
+			return;
+		else
+		{
+			if (ballMode == Constants.GRAVITY_MODE)
+			{
+				DisableLowGravityMode ();
+			}
+			else if (ballMode == Constants.FIREBALL_MODE)
+			{
+				DisableFireballMode ();
+			}
+		}
+		//playerTrans.gameObject.GetComponent<TrailRenderer> ().material = lgtb;
+		ballMode = Constants.NORMAL_MODE;	
 	}
 
 	void Awake () {
@@ -163,7 +177,6 @@ public class Gamer : MonoBehaviour {
 			break;
 		case 2:
 			obj = Instantiate(prismPrefab, objInitPos, Quaternion.identity) as GameObject;
-			//obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 			obj.name = "Prism";
 			break;
 		case 3:

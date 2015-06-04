@@ -74,7 +74,7 @@ public class BallBehaviour : MonoBehaviour {
 		}
 		else if (col.gameObject.tag.Equals (Constants.TAG_BONUS))
 		{
-			PowerupSound.Play();
+			//PowerupSound.Play();
 		}
 			
 		if (col.gameObject.name.Equals(Constants.FIREBALL_BONUS)) 
