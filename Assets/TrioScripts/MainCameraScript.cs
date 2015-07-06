@@ -26,12 +26,23 @@ public class MainCameraScript : MonoBehaviour {
 	{
 		float playerHeight = playerTrans.position.y;
 		float currentCameraHeight = transform.position.y;
-		float newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 10);
+		float newHeight;
 		if (playerTrans.position.y > currentCameraHeight)
 		{
-			currentCameraHeight = newHeight;
-			transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
-			CameraInc = currentCameraHeight - initCameraHeight;
+			if (!Input.GetMouseButton(0))
+			{
+				newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 100);
+				currentCameraHeight = newHeight;
+				transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
+				CameraInc = currentCameraHeight - initCameraHeight;
+			}
+			else{
+				newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 10);
+				currentCameraHeight = newHeight;
+				transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
+				CameraInc = currentCameraHeight - initCameraHeight;
+			}
 		}
+
 	}
 }

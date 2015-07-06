@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\TrioScripts\BallBehaviour.cs" />
      <Compile Include="Assets\TrioScripts\Constants.cs" />
+     <Compile Include="Assets\TrioScripts\Drawer.cs" />
      <Compile Include="Assets\TrioScripts\Gamer.cs" />
      <Compile Include="Assets\TrioScripts\MainCameraScript.cs" />
      <Compile Include="Assets\TrioScripts\ObjectBehavior.cs" />

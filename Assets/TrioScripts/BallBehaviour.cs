@@ -8,7 +8,7 @@ public class BallBehaviour : MonoBehaviour {
 	public GUIText CountText;
 	public int max_height = 0;
 	private int count = 0;
-	public float maxSpeed = 8;
+	public float maxSpeed = 10;
 	public Text HighScore;
 	public TextMesh tm;
 	// Use this for initialization
@@ -41,8 +41,9 @@ public class BallBehaviour : MonoBehaviour {
 		if (col.gameObject.tag == "TrioObject") {
 			float xSpeed = rigidbody.velocity.x;
 			float ySpeed = Mathf.Abs(rigidbody.velocity.y);
+			//float ySpeed = rigidbody.velocity.y;
 			float cons = maxSpeed / Mathf.Sqrt( (xSpeed * xSpeed) + (ySpeed * ySpeed) );
-			rigidbody.velocity = new Vector3(xSpeed * cons, (ySpeed * cons) + 5 , rigidbody.velocity.z);
+			rigidbody.velocity = new Vector3(xSpeed * cons, (ySpeed * cons) + 5, rigidbody.velocity.z);
 			JumpSound.Play();
 			count++;
 		}
