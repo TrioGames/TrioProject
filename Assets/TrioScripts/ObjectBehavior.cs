@@ -36,7 +36,10 @@ public class ObjectBehavior : MonoBehaviour {
 	{
 		gameObject.name = "Destroyed" + gameObject.name;
 		//DestroyObject (gameObject, 0.1f);	
-		DestroyObject (gameObject);
+		//DestroyObject (gameObject);
+
+		//cizilen version icin
+		Gamer.instance.DestroyAllTrioObjects ();
 	}
 
 	void OnTriggerEnter(Collider col)

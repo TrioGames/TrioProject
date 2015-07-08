@@ -9,6 +9,8 @@ public class Constants : MonoBehaviour {
 
 	public const string TAG_PLANE = "Respawn";
 
+	public const string TAG_TRIO_OBJECT = "TrioObject";
+
 	public const string TAG_BOTTOM_PLANE = "RockBottomPlane";
 
 	public const int GRAVITY_MODE = 2;

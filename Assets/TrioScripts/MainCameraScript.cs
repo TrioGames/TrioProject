@@ -29,18 +29,18 @@ public class MainCameraScript : MonoBehaviour {
 		float newHeight;
 		if (playerTrans.position.y > currentCameraHeight)
 		{
-			if (!Input.GetMouseButton(0))
+			if (!Gamer.instance.isThereAnyTrioObject())
 			{
-				newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 100);
+				newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 10);
 				currentCameraHeight = newHeight;
 				transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
 				CameraInc = currentCameraHeight - initCameraHeight;
 			}
 			else{
-				newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 10);
-				currentCameraHeight = newHeight;
-				transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
-				CameraInc = currentCameraHeight - initCameraHeight;
+				//newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 10);
+				//currentCameraHeight = newHeight;
+				//transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
+				//CameraInc = currentCameraHeight - initCameraHeight;
 			}
 		}
 

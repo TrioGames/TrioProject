@@ -53,7 +53,7 @@ public class Gamer : MonoBehaviour {
 	public bool LowGravityMode;
 
 	// top yukseldikce platformlar daha sik geliyor
-	private readonly float[,] spawnHeightArray  = new float[3,2] { {8.0f, 20.0f}, {5.0f, 12f}, {4.0f,8.0f} };
+	private readonly float[,] spawnHeightArray  = new float[3,2] { {4.5f, 9.0f}, {4.0f, 7.5f}, {3.0f,6.0f} };
 	private int gameLevel; //0-1-2 olabilir
 
 
@@ -62,7 +62,7 @@ public class Gamer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PauseGame ();
+		//PauseGame ();
 
 		DisableLowGravityMode ();
 
@@ -72,14 +72,14 @@ public class Gamer : MonoBehaviour {
 
 		gameLevel = 0;
 
-		obj1 = GetRandomObject ();
-		obj1.transform.position = obj1Pos;
+		//obj1 = GetRandomObject ();
+		//obj1.transform.position = obj1Pos;
 
-		obj2 = GetRandomObject ();
-		obj2.transform.position = obj2Pos;
+		//obj2 = GetRandomObject ();
+		//obj2.transform.position = obj2Pos;
 
-		obj3 = GetRandomObject ();
-		obj3.transform.position = obj3Pos;
+		//obj3 = GetRandomObject ();
+		//obj3.transform.position = obj3Pos;
 
 
 	}
@@ -237,7 +237,7 @@ public class Gamer : MonoBehaviour {
 	void Update () {
 		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
 		float playerHeight = playerTrans.position.y;
-		RecreateMissingObject ();
+		//RecreateMissingObject ();
 		IncreaseGameDifficulty (playerHeight);
 		MaintainPlatforms (playerHeight);
 		MaintainPowerups (playerHeight);
@@ -512,4 +512,23 @@ public class Gamer : MonoBehaviour {
 						}
 				}
 		}
+
+	//yeni version icin
+	public void DestroyAllTrioObjects()
+	{
+		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag (Constants.TAG_TRIO_OBJECT);
+		for(int i = 0 ; i < gameObjects.Length ; i ++)
+		{
+			Destroy(gameObjects[i]);
+		}
+	}
+
+	public bool isThereAnyTrioObject()
+	{
+		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag (Constants.TAG_TRIO_OBJECT);
+		if (gameObjects.Length > 0)
+			return true;
+		else
+			return false;
+	}
 }
