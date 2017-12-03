@@ -39,12 +39,12 @@ public class BallBehaviour : MonoBehaviour {
 	{
 		//if (col.gameObject.tag == "TrioObject" || col.gameObject.tag == "Platform") {
 		if (col.gameObject.tag == "TrioObject") {
-			float xSpeed = rigidbody.velocity.x;
-			float ySpeed = Mathf.Abs(rigidbody.velocity.y);
+			float xSpeed = GetComponent<Rigidbody>().velocity.x;
+			float ySpeed = Mathf.Abs(GetComponent<Rigidbody>().velocity.y);
 			//float ySpeed = rigidbody.velocity.y;
 			float cons = maxSpeed / Mathf.Sqrt( (xSpeed * xSpeed) + (ySpeed * ySpeed) );
 			//rigidbody.velocity = new Vector3(xSpeed * cons, (ySpeed * cons) + 5, rigidbody.velocity.z);
-			rigidbody.velocity = new Vector3(xSpeed * cons, (ySpeed * cons), rigidbody.velocity.z);
+			GetComponent<Rigidbody>().velocity = new Vector3(xSpeed * cons, (ySpeed * cons), GetComponent<Rigidbody>().velocity.z);
 
 			JumpSound.Play();
 			count++;
@@ -87,7 +87,7 @@ public class BallBehaviour : MonoBehaviour {
 		else if (col.gameObject.name.Equals(Constants.SUPERBALL_BONUS))
 		{
 			Gamer.instance.EnableFireballMode (Constants.SUPERBALL_TIMER_INIT, Constants.SUPERBALL_BONUS );
-			rigidbody.velocity = new Vector3(rigidbody.velocity.x, Constants.SUPERBALL_SPEED_CONST , rigidbody.velocity.z); 
+			GetComponent<Rigidbody>().velocity = new Vector3(GetComponent<Rigidbody>().velocity.x, Constants.SUPERBALL_SPEED_CONST , GetComponent<Rigidbody>().velocity.z); 
 		}
 		else if (col.gameObject.name.Equals(Constants.GRAVITY_BONUS))
 		{

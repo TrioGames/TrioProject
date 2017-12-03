@@ -10,7 +10,7 @@ public class mouseDrag : MonoBehaviour {
 
 		objPosition = new Vector3 (objPosition.x, objPosition.y, -17.0f);
 		transform.position = objPosition;
-		Destroy(transform.collider);
+		Destroy(transform.GetComponent<Collider>());
 		gameObject.AddComponent<MeshCollider>();
 
 		if (Gamer.instance.GameStatus == Constants.GAME_STATUS_PAUSE) {

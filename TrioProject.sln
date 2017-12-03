@@ -1,13 +1,9 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{E730E770-AA86-7CDE-21D5-13C4F1CBF110}") = "TrioProject", "Assembly-CSharp-firstpass.csproj", "{1344CA20-DA23-A209-34EA-EF0714AABF1F}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrioProject", "Assembly-CSharp.csproj", "{518E3E24-D95E-202B-EA7A-00F9DD423E86}"
 EndProject
-Project("{E730E770-AA86-7CDE-21D5-13C4F1CBF110}") = "TrioProject", "Assembly-CSharp.csproj", "{518E3E24-D95E-202B-EA7A-00F9DD423E86}"
-EndProject
-Project("{E730E770-AA86-7CDE-21D5-13C4F1CBF110}") = "TrioProject", "Assembly-UnityScript-firstpass.unityproj", "{541E1127-5B6C-ED4C-0D55-E52172D82A2F}"
-EndProject
-Project("{E730E770-AA86-7CDE-21D5-13C4F1CBF110}") = "TrioProject", "Assembly-UnityScript.unityproj", "{8629E8C0-4438-FC89-85DF-BCB4C0028BB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrioProject", "Assembly-CSharp-firstpass.csproj", "{1344CA20-DA23-A209-34EA-EF0714AABF1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,22 +11,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{518E3E24-D95E-202B-EA7A-00F9DD423E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{518E3E24-D95E-202B-EA7A-00F9DD423E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{518E3E24-D95E-202B-EA7A-00F9DD423E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{518E3E24-D95E-202B-EA7A-00F9DD423E86}.Release|Any CPU.Build.0 = Release|Any CPU
-		{541E1127-5B6C-ED4C-0D55-E52172D82A2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{541E1127-5B6C-ED4C-0D55-E52172D82A2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{541E1127-5B6C-ED4C-0D55-E52172D82A2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{541E1127-5B6C-ED4C-0D55-E52172D82A2F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8629E8C0-4438-FC89-85DF-BCB4C0028BB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8629E8C0-4438-FC89-85DF-BCB4C0028BB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8629E8C0-4438-FC89-85DF-BCB4C0028BB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8629E8C0-4438-FC89-85DF-BCB4C0028BB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1344CA20-DA23-A209-34EA-EF0714AABF1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +41,4 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
-
 EndGlobal

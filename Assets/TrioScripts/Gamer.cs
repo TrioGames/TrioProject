@@ -203,8 +203,8 @@ public class Gamer : MonoBehaviour {
 		var rot = transform.rotation;
 		obj.transform.rotation = rot * Quaternion.Euler(0, 0, randomAngle); 
 		obj.tag = "TrioObject";
-		obj.AddComponent("mouseDrag");
-		obj.AddComponent ("ObjectBehavior");
+		obj.AddComponent<mouseDrag>();
+		obj.AddComponent <ObjectBehavior>();
 		obj.transform.localScale -= new Vector3(objScale, objScale, objScale);
 		return obj;
 	}
