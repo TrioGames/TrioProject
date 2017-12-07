@@ -2,7 +2,8 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Facebook.Unity;
-using System;
+
+
 
 public class mainMenuButtons : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class mainMenuButtons : MonoBehaviour
     public GameObject HighScoreText;
     public GameObject Avatar;
     public static mainMenuButtons instance { get; private set; }
+
+    private List<object> scoresList = null;
 
     public Text Skor;
     // Use this for initialization
@@ -131,6 +134,7 @@ public class mainMenuButtons : MonoBehaviour
     {
         FB.LogOut();
         LogButtonShowHide();
+        Score.instance.ResetHighScore(0);
     }
 
     private void LogButtonShowHide()
@@ -167,6 +171,9 @@ public class mainMenuButtons : MonoBehaviour
 
         Text UserName = HighScoreText.GetComponent<Text>();
         UserName.text = result.ResultDictionary["first_name"].ToString() + ": " + Score.instance.GetHighScore().ToString();
+
+        SetScore();
+        
     }
 
     void DisplayAvatar(IGraphResult result)
@@ -185,6 +192,24 @@ public class mainMenuButtons : MonoBehaviour
         Avatar.SetActive(true);
         Image avatar = Avatar.GetComponent<Image>();
         avatar.sprite = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
+    }
+
+    void UserListCallback(IResult result)
+    {
+        Debug.Log(result.RawResult);
+    }
+
+    void SetScore()
+    {
+        var scoreData = new Dictionary<string, string>();
+
+        scoreData["score"] = Score.instance.GetHighScore().ToString();
+
+        FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result) {
+            Debug.Log("score submit result: " + result.RawResult);
+
+            FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, UserListCallback);
+        }, scoreData);
     }
 }
 
