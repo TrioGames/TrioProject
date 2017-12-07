@@ -54,4 +54,10 @@ public class Constants : MonoBehaviour {
 	public const float GRAVITY_TIMER = 10;
 
 	public const string TAG_PLATFORM = "Platform";
+
+    public const bool IsMobile = false;
+
+    public const bool IsWeb = false;
+
+    public const bool IsEditor = true;
 }

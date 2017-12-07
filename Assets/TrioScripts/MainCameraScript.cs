@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MainCameraScript : MonoBehaviour {
 	
 	private Transform playerTrans;
 
 	private float initCameraHeight;
-
-	private float currentCameraHeight;
 
 	public static float CameraInc = 0;
 	
@@ -24,7 +23,13 @@ public class MainCameraScript : MonoBehaviour {
 	// Update is called once per frame
 	void LateUpdate () 
 	{
-		float playerHeight = playerTrans.position.y;
+        var activeScene = SceneManager.GetActiveScene();
+        if (activeScene.name == "MenuScene")
+        {
+            return;
+        }
+
+        float playerHeight = playerTrans.position.y;
 		float currentCameraHeight = transform.position.y;
 		float newHeight;
 		if (playerTrans.position.y > currentCameraHeight)
