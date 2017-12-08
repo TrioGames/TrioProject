@@ -55,9 +55,9 @@ public class Constants : MonoBehaviour {
 
 	public const string TAG_PLATFORM = "Platform";
 
-    public bool IsMobile = Application.platform.ToString() == "IPhonePlayer" || Application.platform.ToString() == "Android";
+    public const bool IsMobile = false;
 
     public const bool IsWeb = false;
 
-    public bool IsEditor = Application.platform.ToString() == "WindowsEditor";
+    public const bool IsEditor = true;
 }

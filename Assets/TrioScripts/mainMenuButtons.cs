@@ -2,8 +2,8 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Facebook.Unity;
-
-
+using UnityEngine.SceneManagement;
+using Facebook.MiniJSON;
 
 public class mainMenuButtons : MonoBehaviour
 {
@@ -30,20 +30,7 @@ public class mainMenuButtons : MonoBehaviour
     void Awake()
     {
         instance = this;
-
-        FB.Init(SetInit, OnHideUnity);
-    }
-
-    private void OnHideUnity(bool isUnityShown)
-    {
-        if (!isUnityShown)
-        {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
-        }
+        FacebookManager.Instance.InitFB();
     }
 
     public void UpdateScoreBoard()
@@ -52,35 +39,27 @@ public class mainMenuButtons : MonoBehaviour
             Skor.text = "HIGHSCORE: " + Score.instance.GetHighScore().ToString();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void StartGame()
     {
-        Application.LoadLevel("GameScene");
+        SceneManager.LoadScene("GameScene");
         Gamer.instance.PauseGame();
     }
 
     public void ExitGame()
     {
         Application.Quit();
-        Application.LoadLevel("MenuScene");
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 
     public void DisplayCredits()
     {
         menu.SetActive(false);
         CreditsMenu.SetActive(true);
-    }
-
-    public void BackToMenu()
-    {
-        //		CreditsMenu.SetActive (false);
-        //		menu.SetActive (true);
-        Application.LoadLevel("MenuScene");
     }
 
     public void PauseGame()
@@ -90,8 +69,8 @@ public class mainMenuButtons : MonoBehaviour
         resumeText.transform.position = new Vector3(resumeText.transform.position.x, newScore, resumeText.transform.position.z);
         resumeText.SetActive(true);
         pauseButton.SetActive(false);
-        //menu.SetActive(true);
     }
+
     public void ActivatePauseButton()
     {
         pauseButton.SetActive(true);
@@ -104,42 +83,9 @@ public class mainMenuButtons : MonoBehaviour
         Gamer.instance.StartGame();
     }
 
-
-    // ******************** Facebook Connections ******************** \\
-
-    void SetInit()
+    public void LogButtonShowHide()
     {
-        LogButtonShowHide();
-    }
-
-    public void FBLogin()
-    {
-        List<string> permissions = new List<string>();
-        permissions.Add("public_profile");
-
-        FB.LogInWithReadPermissions(permissions, AuthCallback);
-    }
-
-    void AuthCallback(IResult result)
-    {
-        if (result.Error != null)
-        {
-            Debug.Log(result.Error);
-        }
-
-        LogButtonShowHide();
-    }
-
-    public void FBLogout()
-    {
-        FB.LogOut();
-        LogButtonShowHide();
-        Score.instance.ResetHighScore(0);
-    }
-
-    private void LogButtonShowHide()
-    {
-        var isLoggedIn = FB.IsLoggedIn;
+        var isLoggedIn = FacebookManager.Instance.IsLoggedIn;
 
         if (!isLoggedIn)
         {
@@ -155,28 +101,16 @@ public class mainMenuButtons : MonoBehaviour
         {
             LogoutButton.SetActive(true);
             LoginButton.SetActive(false);
-
-            FB.API("/me?fields=first_name", HttpMethod.GET, DisplayUserName);
-            FB.API("/me/picture?type=square&height=128&width=128", HttpMethod.GET, DisplayAvatar);
         }
     }
 
-    void DisplayUserName(IResult result)
+    public void DisplayUserName(string result)
     {
-        if (result.Error != null)
-        {
-            Debug.Log(result.Error);
-            return;
-        }
-
         Text UserName = HighScoreText.GetComponent<Text>();
-        UserName.text = result.ResultDictionary["first_name"].ToString() + ": " + Score.instance.GetHighScore().ToString();
-
-        SetScore();
-        
+        UserName.text = result + ": " + Score.instance.GetHighScore().ToString();
     }
 
-    void DisplayAvatar(IGraphResult result)
+    public void DisplayAvatar(IGraphResult result)
     {
         if (result.Error != null)
         {
@@ -194,22 +128,66 @@ public class mainMenuButtons : MonoBehaviour
         avatar.sprite = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
     }
 
-    void UserListCallback(IResult result)
+    public void Login()
     {
-        Debug.Log(result.RawResult);
+        Debug.Log("Login Clicked");
+        FacebookManager.Instance.FBLogin(delegate (ILoginResult res)
+        {
+            if (res.Error != null)
+            {
+                Debug.Log("Login Failed!!!");
+            }
+            else
+            {
+                CreateProfile();
+            }
+        });
     }
 
-    void SetScore()
+    public void Logout()
     {
-        var scoreData = new Dictionary<string, string>();
+        FacebookManager.Instance.FBLogout();
+    }
 
-        scoreData["score"] = Score.instance.GetHighScore().ToString();
+    public void CreateProfile()
+    {
+        FacebookManager.Instance.GetFBName(delegate (IGraphResult _result)
+        {
+            if (_result.Error != null)
+            {
+                DisplayUserName("Guesst");
+            }
+            else
+            {
+                DisplayUserName(_result.ResultDictionary["first_name"].ToString());
+            }
+        });
 
-        FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result) {
-            Debug.Log("score submit result: " + result.RawResult);
+        FacebookManager.Instance.GetFBAvatar(delegate (IGraphResult _result)
+        {
+            if (_result.Error != null)
+            {
+                Avatar.SetActive(false);
+            }
+            else
+            {
+                DisplayAvatar(_result);
+            }
+        });
 
-            FB.API("/app/scores?fields=score,user.limit(30)", HttpMethod.GET, UserListCallback);
-        }, scoreData);
+        FacebookManager.Instance.GetFBScore(delegate (IGraphResult _result)
+        {
+            if (_result.Error != null)
+            {
+                Text UserName = HighScoreText.GetComponent<Text>();
+                UserName.text = "HIGH SCORE: 0";
+            }
+            else
+            {
+                Text UserName = HighScoreText.GetComponent<Text>();
+                UserName.text = "HIGH SCORE: " + _result.ResultDictionary["score"].ToString();
+            }
+        });
     }
 }
 
