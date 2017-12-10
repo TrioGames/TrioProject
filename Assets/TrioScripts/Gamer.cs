@@ -72,15 +72,15 @@ public class Gamer : MonoBehaviour {
 
 		gameLevel = 0;
 
-		//obj1 = GetRandomObject ();
-		//obj1.transform.position = obj1Pos;
+		obj1 = GetRandomObject ();
+		obj1.transform.position = obj1Pos;
 
-		//obj2 = GetRandomObject ();
-		//obj2.transform.position = obj2Pos;
+		obj2 = GetRandomObject ();
+		obj2.transform.position = obj2Pos;
 
-		//obj3 = GetRandomObject ();
-		//obj3.transform.position = obj3Pos;
-
+		obj3 = GetRandomObject ();
+		obj3.transform.position = obj3Pos;
+  
 
 	}
 
@@ -237,7 +237,7 @@ public class Gamer : MonoBehaviour {
 	void Update () {
 		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
 		float playerHeight = playerTrans.position.y;
-		//RecreateMissingObject ();
+		RecreateMissingObject ();
 		IncreaseGameDifficulty (playerHeight);
 		MaintainPlatforms (playerHeight);
 		MaintainPowerups (playerHeight);

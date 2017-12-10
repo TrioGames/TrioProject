@@ -42,10 +42,10 @@ public class MainCameraScript : MonoBehaviour {
 				CameraInc = currentCameraHeight - initCameraHeight;
 			}
 			else{
-				//newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 10);
-				//currentCameraHeight = newHeight;
-				//transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
-				//CameraInc = currentCameraHeight - initCameraHeight;
+				newHeight = Mathf.Lerp(currentCameraHeight, playerHeight, Time.deltaTime * 10);
+				currentCameraHeight = newHeight;
+				transform.position = new Vector3(transform.position.x, newHeight, transform.position.z);
+				CameraInc = currentCameraHeight - initCameraHeight;
 			}
 		}
 
