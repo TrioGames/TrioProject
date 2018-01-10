@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Facebook.Unity;
 using UnityEngine.SceneManagement;
-using Facebook.MiniJSON;
 
 public class mainMenuButtons : MonoBehaviour
 {
@@ -25,6 +24,7 @@ public class mainMenuButtons : MonoBehaviour
     void Start()
     {
         UpdateScoreBoard();
+        LogButtonShowHide();
     }
 
     void Awake()
@@ -36,13 +36,17 @@ public class mainMenuButtons : MonoBehaviour
     public void UpdateScoreBoard()
     {
         if (null != Skor)
-            Skor.text = "HIGHSCORE: " + Score.instance.GetHighScore().ToString();
+            DisplayUserName("Guesst");
     }
 
     public void StartGame()
     {
         SceneManager.LoadScene("GameScene");
-        Gamer.instance.PauseGame();
+
+        if (Gamer.instance != null)
+        {
+            Gamer.instance.PauseGame();
+        }
     }
 
     public void ExitGame()
@@ -87,17 +91,16 @@ public class mainMenuButtons : MonoBehaviour
     {
         var isLoggedIn = FacebookManager.Instance.IsLoggedIn;
 
-        if (!isLoggedIn)
+        if (!isLoggedIn && LogoutButton != null)
         {
             LogoutButton.SetActive(false);
             LoginButton.SetActive(true);
-
-            Text UserName = HighScoreText.GetComponent<Text>();
-            UserName.text = "HIGH SCORE: " + Score.instance.GetHighScore().ToString();
-
             Avatar.SetActive(false);
+
+            DisplayUserName("Guesst");
+
         }
-        else
+        else if (LogoutButton != null)
         {
             LogoutButton.SetActive(true);
             LoginButton.SetActive(false);
@@ -106,8 +109,11 @@ public class mainMenuButtons : MonoBehaviour
 
     public void DisplayUserName(string result)
     {
-        Text UserName = HighScoreText.GetComponent<Text>();
-        UserName.text = result + ": " + Score.instance.GetHighScore().ToString();
+        if (HighScoreText != null)
+        {
+            Text UserName = HighScoreText.GetComponent<Text>();
+            UserName.text = result + ": " + Score.instance.GetHighScore().ToString();
+        }
     }
 
     public void DisplayAvatar(IGraphResult result)
@@ -130,7 +136,6 @@ public class mainMenuButtons : MonoBehaviour
 
     public void Login()
     {
-        Debug.Log("Login Clicked");
         FacebookManager.Instance.FBLogin(delegate (ILoginResult res)
         {
             if (res.Error != null)
@@ -147,6 +152,7 @@ public class mainMenuButtons : MonoBehaviour
     public void Logout()
     {
         FacebookManager.Instance.FBLogout();
+        LogButtonShowHide();
     }
 
     public void CreateProfile()
@@ -188,6 +194,8 @@ public class mainMenuButtons : MonoBehaviour
                 UserName.text = "HIGH SCORE: " + _result.ResultDictionary["score"].ToString();
             }
         });
+
+        LogButtonShowHide();
     }
 }
 

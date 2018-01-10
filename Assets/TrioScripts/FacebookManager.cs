@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Facebook.Unity;
-using Facebook.MiniJSON;
-using System.Collections;
 
 public class FacebookManager : MonoBehaviour
 {

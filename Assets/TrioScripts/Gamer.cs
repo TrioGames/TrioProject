@@ -21,8 +21,10 @@ public class Gamer : MonoBehaviour {
 	public Material blue;
 	public Material green;
 
-	//prefabs
-	public Transform platformPrefab;
+    private GameObject mainball;
+
+    //prefabs
+    public Transform platformPrefab;
 	public Transform powerupPrefab;
 	public GameObject starPrefab;
 	public GameObject concavePrefab;
@@ -62,15 +64,17 @@ public class Gamer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//PauseGame ();
+		PauseGame ();
 
 		DisableLowGravityMode ();
 
 		Score.instance.Start();
 
-		//Score.instance.ResetHighScore (5);
+        //Score.instance.ResetHighScore (5);
 
-		gameLevel = 0;
+        mainball = GameObject.Find(Constants.MAIN_BALL);
+
+        gameLevel = 0;
 
 		obj1 = GetRandomObject ();
 		obj1.transform.position = obj1Pos;
@@ -80,11 +84,11 @@ public class Gamer : MonoBehaviour {
 
 		obj3 = GetRandomObject ();
 		obj3.transform.position = obj3Pos;
-  
 
-	}
+        RotateGameObjects();
+    }
 
-	public Gamer GetInstance()
+    public Gamer GetInstance()
 	{
 		if (instance == null)
 			instance = new Gamer();
@@ -130,13 +134,56 @@ public class Gamer : MonoBehaviour {
 	}
 
 	void Awake () {
-		voidLayer = LayerMask.NameToLayer( "Void" );
 		instance = this;
+		voidLayer = LayerMask.NameToLayer( "Void" );
 		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
 		platforms = new ArrayList();
 		//SpawnPlatforms(2.0f);
 		StartGame();
 	}
+
+    public void SetAspectRatio()
+    {
+        // set the desired aspect ratio (the values in this example are
+        // hard-coded for 16:9, but you could make them into public
+        // variables instead so you can set them at design time)
+        float targetaspect = 16.0f / 9.0f;
+
+        // determine the game window's current aspect ratio
+        float windowaspect = (float)Screen.width / (float)Screen.height;
+
+        // current viewport height should be scaled by this amount
+        float scaleheight = windowaspect / targetaspect;
+
+        // obtain camera component so we can modify its viewport
+        Camera camera = GetComponent<Camera>();
+
+        // if scaled height is less than current height, add letterbox
+        if (scaleheight < 1.0f)
+        {
+            Rect rect = camera.rect;
+
+            rect.width = 1.0f;
+            rect.height = scaleheight;
+            rect.x = 0;
+            rect.y = (1.0f - scaleheight) / 2.0f;
+
+            camera.rect = rect;
+        }
+        else // add pillarbox
+        {
+            float scalewidth = 1.0f / scaleheight;
+
+            Rect rect = camera.rect;
+
+            rect.width = scalewidth;
+            rect.height = 1.0f;
+            rect.x = (1.0f - scalewidth) / 2.0f;
+            rect.y = 0;
+
+            camera.rect = rect;
+        }
+    }
 
 	
 	public void StartGame()
@@ -231,6 +278,8 @@ public class Gamer : MonoBehaviour {
 			obj3.transform.position = obj3Pos;
 			//print ("obj3 is : " + obj3.name);
 		}
+
+        RotateGameObjects();
 	}
 	
 	// Update is called once per frame
@@ -245,7 +294,29 @@ public class Gamer : MonoBehaviour {
 		Warn4ComingPlatforms (playerHeight);
 	}
 
-	private void IncreaseGameDifficulty(float playerHeight)
+    public void RotateGameObjects()
+    {
+        float _time = 0.01f; ;
+        if (obj1 != null)
+        {
+            if (Time.deltaTime != 0)
+            {
+                _time = Time.deltaTime;
+            }
+
+            obj1.transform.Rotate(Vector3.up, Constants.ROTATE_SPEED * _time);
+            obj1.transform.Rotate(Vector3.left, Constants.ROTATE_SPEED * _time);
+
+            obj2.transform.Rotate(Vector3.down, Constants.ROTATE_SPEED * _time);
+            obj2.transform.Rotate(Vector3.forward, Constants.ROTATE_SPEED * _time);
+
+            obj3.transform.Rotate(Vector3.right, Constants.ROTATE_SPEED * _time);
+            obj3.transform.Rotate(Vector3.back, Constants.ROTATE_SPEED * _time);
+        }
+    }
+
+
+    private void IncreaseGameDifficulty(float playerHeight)
 	{
 		if (playerHeight > 60)
 			gameLevel = 2;
@@ -257,21 +328,45 @@ public class Gamer : MonoBehaviour {
 
 	private void Warn4ComingPlatforms(float playerHeight)
 	{
-		Transform plat =  GetNearestPlatformsCoordinates (playerHeight);
+        Transform plat =  GetNearestPlatformsCoordinates (playerHeight);
 		if (plat != null) {
 			//PlatformWarning.transform.position = new Vector3(plat.position.x , PlatformWarning.transform.position.y , PlatformWarning.transform.position.z );
 			//PlatformWarning.enabled = true;
 			Vector3 newPos = new Vector3(plat.position.x , platWarning.position.y , platWarning.position.z );
 			platWarning.position = Vector3.MoveTowards(platWarning.position , newPos, 5 * Time.deltaTime);
-			//print ((int)PlatformWarning.transform.position.x + "," + (int)PlatformWarning.transform.position.y);
+            //print ((int)PlatformWarning.transform.position.x + "," + (int)PlatformWarning.transform.position.y);
+
 		}
 		else 
 		{
 			//PlatformWarning.enabled = false;	
 		}
+        float distance = Vector3.Distance(mainball.transform.position, plat.position); ;
+        ChageWarningIconColorWithDistance(distance);
 	}
 
-	private Transform GetNearestPlatformsCoordinates (float warningHeightLimit)
+    static byte Interpolate(int start, int end, int steps, int count)
+    {
+        float s = start, e = end, final = s + (((e - s) / steps) * count);
+        return (byte)final;
+    }
+
+    private void ChageWarningIconColorWithDistance(float distance)
+    {
+        Color32 startColors = new Color32(50, 200, 50, 255);
+        Color32 endColors = new Color32(200, 50, 50, 255);
+
+        int val = 20 - (int)distance;
+
+        byte r = Interpolate(startColors.r, endColors.r, 20, val);
+        byte g = Interpolate(startColors.g, endColors.g, 20, val);
+        byte b = Interpolate(startColors.b, endColors.b, 20, val);
+
+        platWarning.GetComponent<Renderer>().material.color = new Color32(r, g, b, 255);
+
+    }
+
+    private Transform GetNearestPlatformsCoordinates (float warningHeightLimit)
 	{
 		string s = "Platforms: ";
 		float nearestplat = warningHeightLimit + 1000;

@@ -55,6 +55,8 @@ public class Constants : MonoBehaviour {
 
 	public const string TAG_PLATFORM = "Platform";
 
+    public const float ROTATE_SPEED = 10;
+
     public const bool IsMobile = false;
 
     public const bool IsWeb = false;
