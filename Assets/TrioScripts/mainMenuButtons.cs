@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Facebook.Unity;
 using UnityEngine.SceneManagement;
+using Facebook.MiniJSON;
 
 public class mainMenuButtons : MonoBehaviour
 {
@@ -15,9 +16,9 @@ public class mainMenuButtons : MonoBehaviour
     public GameObject LogoutButton;
     public GameObject HighScoreText;
     public GameObject Avatar;
+    public GameObject ScoreBoard;
+    public GameObject FriendScorePanel;
     public static mainMenuButtons instance { get; private set; }
-
-    private List<object> scoresList = null;
 
     public Text Skor;
     // Use this for initialization
@@ -192,6 +193,31 @@ public class mainMenuButtons : MonoBehaviour
             {
                 Text UserName = HighScoreText.GetComponent<Text>();
                 UserName.text = "HIGH SCORE: " + _result.ResultDictionary["score"].ToString();
+            }
+        });
+
+        FacebookManager.Instance.GetFBFriendList(delegate (IGraphResult _result)
+        {
+            if (_result.Error != null)
+            {
+
+            }
+            else
+            {
+                var dict = Json.Deserialize(_result.RawResult) as Dictionary<string, object>;
+
+                var friendList = new List<object>();
+                friendList = (List<object>)(dict["data"]);
+
+                foreach (object friend in friendList)
+                {
+                    var entry = (Dictionary<string, object>)friend;
+                    var user = (Dictionary<string, object>)entry["user"];
+
+                    GameObject ScorePanel;
+                    ScorePanel = Instantiate(FriendScorePanel) as GameObject;
+                    ScorePanel.transform.parent = ScoreBoard.transform;
+                }
             }
         });
 
