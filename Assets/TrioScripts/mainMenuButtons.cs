@@ -18,10 +18,18 @@ public class mainMenuButtons : MonoBehaviour
     public GameObject LogoutButton;
     public GameObject HighScoreText;
     public GameObject Avatar;
+    public GameObject GameMenu;
+    public GameObject MainMenu;
+    public GameObject HighScoreMenu;
     public GameObject ScoreMenu;
     public GameObject ScoreView;
     public GameObject ScoreBoard;
     public GameObject FriendScorePanel;
+
+    private string FBName;
+    private IGraphResult FBAvatar;
+
+
     public static mainMenuButtons instance { get; private set; }
 
     public Text Skor;
@@ -36,7 +44,8 @@ public class mainMenuButtons : MonoBehaviour
     {
         instance = this;
         FacebookManager.Instance.InitFB();
-        //ScoreView.SetActive(false);
+        HighScoreMenu.SetActive(false);
+        UpdateScoreBoard();
     }
 
     public void UpdateScoreBoard()
@@ -58,12 +67,13 @@ public class mainMenuButtons : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
-        SceneManager.LoadScene("MenuScene");
     }
 
     public void BackToMenu()
     {
-        SceneManager.LoadScene("MenuScene");
+        MainMenu.SetActive(true);
+        HighScoreMenu.SetActive(false);
+        CreditsMenu.SetActive(false);
     }
 
     public void DisplayCredits()
@@ -109,6 +119,7 @@ public class mainMenuButtons : MonoBehaviour
         }
         else if (LogoutButton != null)
         {
+            CreateProfile();
             LogoutButton.SetActive(true);
             LoginButton.SetActive(false);
         }
@@ -172,8 +183,8 @@ public class mainMenuButtons : MonoBehaviour
 
     public void DisplayScoreView()
     {
-        ScoreMenu.SetActive(true);
-        menu.SetActive(false);
+        HighScoreMenu.SetActive(true);
+        MainMenu.SetActive(false);
     }
 
     public void CreateProfile()
@@ -186,7 +197,8 @@ public class mainMenuButtons : MonoBehaviour
             }
             else
             {
-                DisplayUserName(_result.ResultDictionary["first_name"].ToString());
+                FBName = _result.ResultDictionary["first_name"].ToString();
+                DisplayUserName(FBName);
             }
         });
 
@@ -198,21 +210,21 @@ public class mainMenuButtons : MonoBehaviour
             }
             else
             {
+                FBAvatar = _result;
                 DisplayAvatar(_result);
             }
         });
 
         FacebookManager.Instance.GetFBScore(delegate (IGraphResult _result)
         {
+            Text _HighScoreText = HighScoreText.GetComponent<Text>();
             if (_result.Error != null)
             {
-                Text UserName = HighScoreText.GetComponent<Text>();
-                UserName.text = "HIGH SCORE: 0";
+                Score.instance.ResetHighScore(0);
             }
             else
             {
-                Text UserName = HighScoreText.GetComponent<Text>();
-                UserName.text = "HIGH SCORE: " + _result.ResultDictionary["score"].ToString();
+                Score.instance.ResetHighScore(int.Parse(_result.ResultDictionary["score"].ToString()));
             }
         });
 
