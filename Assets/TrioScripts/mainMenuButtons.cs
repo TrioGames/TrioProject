@@ -12,10 +12,14 @@ public class mainMenuButtons : MonoBehaviour
     public GameObject pauseButton;
     public GameObject perde;
     public GameObject CreditsMenu;
+    public GameObject NewGameButton;
+    public GameObject ExitButton;
     public GameObject LoginButton;
     public GameObject LogoutButton;
     public GameObject HighScoreText;
     public GameObject Avatar;
+    public GameObject ScoreMenu;
+    public GameObject ScoreView;
     public GameObject ScoreBoard;
     public GameObject FriendScorePanel;
     public static mainMenuButtons instance { get; private set; }
@@ -32,6 +36,7 @@ public class mainMenuButtons : MonoBehaviour
     {
         instance = this;
         FacebookManager.Instance.InitFB();
+        //ScoreView.SetActive(false);
     }
 
     public void UpdateScoreBoard()
@@ -99,6 +104,7 @@ public class mainMenuButtons : MonoBehaviour
             Avatar.SetActive(false);
 
             DisplayUserName("Guesst");
+            DestroyScoreBoardPanels();
 
         }
         else if (LogoutButton != null)
@@ -156,6 +162,20 @@ public class mainMenuButtons : MonoBehaviour
         LogButtonShowHide();
     }
 
+    public void DestroyScoreBoardPanels()
+    {
+        foreach (Transform child in ScoreBoard.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
+    public void DisplayScoreView()
+    {
+        ScoreMenu.SetActive(true);
+        menu.SetActive(false);
+    }
+
     public void CreateProfile()
     {
         FacebookManager.Instance.GetFBName(delegate (IGraphResult _result)
@@ -209,6 +229,8 @@ public class mainMenuButtons : MonoBehaviour
                 var friendList = new List<object>();
                 friendList = (List<object>)(dict["data"]);
 
+                DestroyScoreBoardPanels();
+
                 foreach (object friend in friendList)
                 {
                     var entry = (Dictionary<string, object>)friend;
@@ -216,7 +238,30 @@ public class mainMenuButtons : MonoBehaviour
 
                     GameObject ScorePanel;
                     ScorePanel = Instantiate(FriendScorePanel) as GameObject;
-                    ScorePanel.transform.parent = ScoreBoard.transform;
+                    ScorePanel.transform.SetParent(ScoreBoard.transform, false);
+
+                    Transform ThisScoreName = ScorePanel.transform.Find("FriendName");
+                    Transform ThisScoreScore = ScorePanel.transform.Find("FriendScore");
+
+                    Text ScoreName = ThisScoreName.GetComponent<Text>();
+                    Text ScoreScore = ThisScoreScore.GetComponent<Text>();
+
+                    ScoreName.text = user["name"].ToString();
+                    ScoreScore.text = entry["score"].ToString();
+
+                    Transform ThisUserAvatar = ScorePanel.transform.Find("FriendAvatar");
+                    Image UserAvatar = ThisUserAvatar.GetComponent<Image>();
+
+                    FB.API("/" + user["id"].ToString() + "/picture?type=square&height=128&width=128", HttpMethod.GET, delegate (IGraphResult result)
+                    {
+                        if (result.Error != null)
+                        {
+                            Debug.Log(result.Error);
+                            return;
+                        }
+
+                        UserAvatar.sprite = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
+                    });
                 }
             }
         });
