@@ -119,7 +119,7 @@ public class mainMenuButtons : MonoBehaviour
         }
         else if (LogoutButton != null)
         {
-            CreateProfile();
+            //CreateProfile();
             LogoutButton.SetActive(true);
             LoginButton.SetActive(false);
         }
@@ -279,6 +279,7 @@ public class mainMenuButtons : MonoBehaviour
         });
 
         LogButtonShowHide();
+        FacebookManager.Instance.FBFeedShare();
     }
 }
 
