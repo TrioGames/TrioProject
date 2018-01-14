@@ -62,4 +62,6 @@ public class Constants : MonoBehaviour {
     public const bool IsWeb = false;
 
     public const bool IsEditor = true;
+
+    public const int POSSIBLITY_TO_GET_BONUS = 25;
 }

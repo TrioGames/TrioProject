@@ -262,24 +262,39 @@ public class Gamer : MonoBehaviour {
 			//print ("obj1 is null. So recreating...");
 			obj1 = GetRandomObject ();
 			obj1.transform.position = obj1Pos;
-			//print ("obj1 is : " + obj1.name );
-		}
+            if (rollDice(Constants.POSSIBLITY_TO_GET_BONUS))
+            {
+                Transform powerup = CreatePowerup();
+                powerup.transform.position = obj1Pos;
+                // powerup.transform.parent = obj1.transform;
+                print ("obj1 is : " + obj1.transform.position + "\t" + powerup.transform.position);
+                PauseGame();
+            }
+        }
 
 		if (obj2 == null || obj2.name.StartsWith("Destroyed")) {
 			//print ("obj2 is null. So recreating...");
 			obj2 = GetRandomObject ();
 			obj2.transform.position = obj2Pos;
-			//print ("obj2 is : " + obj2.name );
-		}
+            if (rollDice(Constants.POSSIBLITY_TO_GET_BONUS))
+            {
+                Transform powerup = CreatePowerup();
+                powerup.transform.position = obj2Pos;
+                // powerup.transform.parent = obj2.transform;
+            }
+        }
 
 		if (obj3 == null || obj3.name.StartsWith("Destroyed")) {
 			//print ("obj3 is null. So recreating...");
 			obj3 = GetRandomObject ();
 			obj3.transform.position = obj3Pos;
-			//print ("obj3 is : " + obj3.name);
-		}
-
-        RotateGameObjects();
+            if (rollDice(Constants.POSSIBLITY_TO_GET_BONUS))
+            {
+                Transform powerup = CreatePowerup();
+                powerup.transform.position = obj3Pos;
+                // powerup.transform.parent = obj3.transform;
+            }
+        }
 	}
 	
 	// Update is called once per frame
@@ -290,7 +305,7 @@ public class Gamer : MonoBehaviour {
 		IncreaseGameDifficulty (playerHeight);
 		MaintainPlatforms (playerHeight);
 		MaintainPowerups (playerHeight);
-		SpawnPowerups (playerHeight);
+		// SpawnPowerups (playerHeight);
 		Warn4ComingPlatforms (playerHeight);
 	}
 
@@ -502,6 +517,44 @@ public class Gamer : MonoBehaviour {
 			playerTrans.gameObject.GetComponent<TrailRenderer> ().material = blue;
 		}
 	}
+
+    public bool rollDice (int  possb)
+    {
+        int rand = (int)Random.Range(1, 100);
+        if (rand <= possb)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+
+    public Transform CreatePowerup()
+    {
+        Transform powerup = null;
+        string powerupName = GetBonus();
+        Vector3 pos = new Vector3(0.0f, 0.0f, 0.0f);
+        if (powerupName.Equals(Constants.FIREBALL_BONUS))
+        {
+            powerup = (Transform)Instantiate(fireballPrefab, pos, Quaternion.identity);
+            powerup.name = powerupName;
+        }
+        else if (powerupName.Equals(Constants.SUPERBALL_BONUS))
+        {
+            powerup = (Transform)Instantiate(superballPrefab, pos, Quaternion.identity);
+            powerup.name = powerupName;
+            powerup.rotation = powerup.rotation * Quaternion.Euler(90, 0, 180);
+        }
+        else if (powerupName.Equals(Constants.GRAVITY_BONUS))
+        {
+            powerup = (Transform)Instantiate(gravityPrefab, pos, Quaternion.identity);
+            powerup.name = powerupName;
+        }
+        return powerup;
+    }
 	
 	public void SpawnPowerups(float playerHeight)
 	{
