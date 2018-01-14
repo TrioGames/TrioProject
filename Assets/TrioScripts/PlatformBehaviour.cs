@@ -17,7 +17,7 @@ public class PlatformBehaviour : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col)
 	{
-		if (Gamer.instance.ballMode == Constants.FIREBALL_MODE)
+        if (Gamer.instance.ballMode == Constants.FIREBALL_MODE)
 		{
 			Instantiate (explosionPrefab, transform.position, transform.rotation);
 			DestroyObject (gameObject);	
