@@ -27,7 +27,7 @@ public class Drawer : MonoBehaviour {
 			scale = Vector3.Distance (end, start);
 			Vector3 v = (end - start);
 			v.Normalize();
-			Debug.Log(v.normalized);
+			//Debug.Log(v.normalized);
 			if(end.y >= start.y)
 			{
 				angle = Vector3.Angle (axisX, end - start);

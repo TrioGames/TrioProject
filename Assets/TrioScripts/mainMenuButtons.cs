@@ -12,48 +12,68 @@ public class mainMenuButtons : MonoBehaviour
     public GameObject pauseButton;
     public GameObject perde;
     public GameObject CreditsMenu;
+    public GameObject NewGameButton;
+    public GameObject ExitButton;
     public GameObject LoginButton;
     public GameObject LogoutButton;
     public GameObject HighScoreText;
     public GameObject Avatar;
-    public static mainMenuButtons instance { get; private set; }
+    public GameObject GameMenu;
+    public GameObject MainMenu;
+    public GameObject HighScoreMenu;
+    public GameObject ScoreMenu;
+    public GameObject ScoreView;
+    public GameObject ScoreBoard;
+    public GameObject FriendScorePanel;
 
-    private List<object> scoresList = null;
+    private string FBName;
+    private IGraphResult FBAvatar;
+
+
+    public static mainMenuButtons instance { get; private set; }
 
     public Text Skor;
     // Use this for initialization
     void Start()
     {
         UpdateScoreBoard();
+        LogButtonShowHide();
     }
 
     void Awake()
     {
         instance = this;
         FacebookManager.Instance.InitFB();
+        HighScoreMenu.SetActive(false);
+        UpdateScoreBoard();
     }
 
     public void UpdateScoreBoard()
     {
         if (null != Skor)
-            Skor.text = "HIGHSCORE: " + Score.instance.GetHighScore().ToString();
+            DisplayUserName("Guesst");
     }
 
     public void StartGame()
     {
         SceneManager.LoadScene("GameScene");
-        Gamer.instance.PauseGame();
+
+        if (Gamer.instance != null)
+        {
+            Gamer.instance.PauseGame();
+        }
     }
 
     public void ExitGame()
     {
         Application.Quit();
-        SceneManager.LoadScene("MenuScene");
     }
 
     public void BackToMenu()
     {
-        SceneManager.LoadScene("MenuScene");
+        MainMenu.SetActive(true);
+        HighScoreMenu.SetActive(false);
+        CreditsMenu.SetActive(false);
     }
 
     public void DisplayCredits()
@@ -87,18 +107,19 @@ public class mainMenuButtons : MonoBehaviour
     {
         var isLoggedIn = FacebookManager.Instance.IsLoggedIn;
 
-        if (!isLoggedIn)
+        if (!isLoggedIn && LogoutButton != null)
         {
             LogoutButton.SetActive(false);
             LoginButton.SetActive(true);
-
-            Text UserName = HighScoreText.GetComponent<Text>();
-            UserName.text = "HIGH SCORE: " + Score.instance.GetHighScore().ToString();
-
             Avatar.SetActive(false);
+
+            DisplayUserName("Guesst");
+            DestroyScoreBoardPanels();
+
         }
-        else
+        else if (LogoutButton != null)
         {
+            //CreateProfile();
             LogoutButton.SetActive(true);
             LoginButton.SetActive(false);
         }
@@ -106,8 +127,11 @@ public class mainMenuButtons : MonoBehaviour
 
     public void DisplayUserName(string result)
     {
-        Text UserName = HighScoreText.GetComponent<Text>();
-        UserName.text = result + ": " + Score.instance.GetHighScore().ToString();
+        if (HighScoreText != null)
+        {
+            Text UserName = HighScoreText.GetComponent<Text>();
+            UserName.text = result + ": " + Score.instance.GetHighScore().ToString();
+        }
     }
 
     public void DisplayAvatar(IGraphResult result)
@@ -130,7 +154,6 @@ public class mainMenuButtons : MonoBehaviour
 
     public void Login()
     {
-        Debug.Log("Login Clicked");
         FacebookManager.Instance.FBLogin(delegate (ILoginResult res)
         {
             if (res.Error != null)
@@ -147,6 +170,21 @@ public class mainMenuButtons : MonoBehaviour
     public void Logout()
     {
         FacebookManager.Instance.FBLogout();
+        LogButtonShowHide();
+    }
+
+    public void DestroyScoreBoardPanels()
+    {
+        foreach (Transform child in ScoreBoard.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
+    public void DisplayScoreView()
+    {
+        HighScoreMenu.SetActive(true);
+        MainMenu.SetActive(false);
     }
 
     public void CreateProfile()
@@ -159,7 +197,8 @@ public class mainMenuButtons : MonoBehaviour
             }
             else
             {
-                DisplayUserName(_result.ResultDictionary["first_name"].ToString());
+                FBName = _result.ResultDictionary["first_name"].ToString();
+                DisplayUserName(FBName);
             }
         });
 
@@ -171,23 +210,76 @@ public class mainMenuButtons : MonoBehaviour
             }
             else
             {
+                FBAvatar = _result;
                 DisplayAvatar(_result);
             }
         });
 
         FacebookManager.Instance.GetFBScore(delegate (IGraphResult _result)
         {
+            Text _HighScoreText = HighScoreText.GetComponent<Text>();
             if (_result.Error != null)
             {
-                Text UserName = HighScoreText.GetComponent<Text>();
-                UserName.text = "HIGH SCORE: 0";
+                Score.instance.ResetHighScore(0);
             }
             else
             {
-                Text UserName = HighScoreText.GetComponent<Text>();
-                UserName.text = "HIGH SCORE: " + _result.ResultDictionary["score"].ToString();
+                Score.instance.ResetHighScore(int.Parse(_result.ResultDictionary["score"].ToString()));
             }
         });
+
+        FacebookManager.Instance.GetFBFriendList(delegate (IGraphResult _result)
+        {
+            if (_result.Error != null)
+            {
+
+            }
+            else
+            {
+                var dict = Json.Deserialize(_result.RawResult) as Dictionary<string, object>;
+
+                var friendList = new List<object>();
+                friendList = (List<object>)(dict["data"]);
+
+                DestroyScoreBoardPanels();
+
+                foreach (object friend in friendList)
+                {
+                    var entry = (Dictionary<string, object>)friend;
+                    var user = (Dictionary<string, object>)entry["user"];
+
+                    GameObject ScorePanel;
+                    ScorePanel = Instantiate(FriendScorePanel) as GameObject;
+                    ScorePanel.transform.SetParent(ScoreBoard.transform, false);
+
+                    Transform ThisScoreName = ScorePanel.transform.Find("FriendName");
+                    Transform ThisScoreScore = ScorePanel.transform.Find("FriendScore");
+
+                    Text ScoreName = ThisScoreName.GetComponent<Text>();
+                    Text ScoreScore = ThisScoreScore.GetComponent<Text>();
+
+                    ScoreName.text = user["name"].ToString();
+                    ScoreScore.text = entry["score"].ToString();
+
+                    Transform ThisUserAvatar = ScorePanel.transform.Find("FriendAvatar");
+                    Image UserAvatar = ThisUserAvatar.GetComponent<Image>();
+
+                    FB.API("/" + user["id"].ToString() + "/picture?type=square&height=128&width=128", HttpMethod.GET, delegate (IGraphResult result)
+                    {
+                        if (result.Error != null)
+                        {
+                            Debug.Log(result.Error);
+                            return;
+                        }
+
+                        UserAvatar.sprite = Sprite.Create(result.Texture, new Rect(0, 0, 128, 128), new Vector2());
+                    });
+                }
+            }
+        });
+
+        LogButtonShowHide();
+        FacebookManager.Instance.FBFeedShare();
     }
 }
 

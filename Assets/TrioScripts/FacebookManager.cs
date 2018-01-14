@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Facebook.Unity;
-using Facebook.MiniJSON;
-using System.Collections;
 
 public class FacebookManager : MonoBehaviour
 {
@@ -131,5 +129,42 @@ public class FacebookManager : MonoBehaviour
         {
             action(result);
         });
+    }
+
+    public void FBInvite()
+    {
+        FB.Mobile.AppInvite(
+            new Uri("AppLinkUrl"),
+            new Uri("picture"),
+            delegate (IAppInviteResult result)
+        {
+
+        });
+    }
+
+    public void AppRequestFBFriends()
+    {
+        FB.AppRequest(
+            "Come play this great game!",
+            null, null, null, null, null, null,
+            delegate (IAppRequestResult result)
+            {
+                Debug.Log(result.RawResult);
+            }
+        );
+    }
+
+    public void FBFeedShare()
+    {
+        FB.FeedShare(
+            linkCaption: "This is my highscore!!",
+            picture: new Uri("https://www.loteriadecatalunya.cat/imageassets/game-trio.svg"),
+            link: new Uri("http://apps.facebook.com/" + FB.AppId + "/?challenge_brag=" + (FB.IsLoggedIn ? FB.ClientToken : "guest")),
+            linkName: "Trio",
+            callback: delegate(IShareResult result)
+        {
+
+        });
+
     }
 }
