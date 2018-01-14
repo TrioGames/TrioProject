@@ -27,17 +27,18 @@ public class TouchBehaviour : MonoBehaviour {
         // Vector3 dir = getForceDirection(quarter);
         // mainball.GetComponent<Rigidbody>().AddForce(dir * 200);
 
-
         int dir = getVelocityDirection(quarter);
-        mainball.GetComponent<Rigidbody>().velocity = new Vector3(1 * dir, 3, mainball.GetComponent<Rigidbody>().velocity.z);
-
+        if (mainball.GetComponent<Rigidbody>().velocity.y < 10)
+        {
+            mainball.GetComponent<Rigidbody>().velocity = new Vector3(1 * dir, 3, mainball.GetComponent<Rigidbody>().velocity.z);
+        }
     }
 
     int getVelocityDirection(int quarter)
     {
         if (quarter == 1)
         {
-            return -2;
+            return -1;
         }
         else if (quarter == 2)
         {
@@ -49,7 +50,7 @@ public class TouchBehaviour : MonoBehaviour {
         }
         else if (quarter == 4)
         {
-            return 2;
+            return 1;
         }
         return 0;
     }
