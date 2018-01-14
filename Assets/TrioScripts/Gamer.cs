@@ -373,14 +373,20 @@ public class Gamer : MonoBehaviour
 
     private void ChageWarningIconColorWithDistance(float distance)
     {
+        if (distance > 6)
+        {
+            distance = 6;
+        }
+
         Color32 startColors = new Color32(50, 200, 50, 255);
         Color32 endColors = new Color32(200, 50, 50, 255);
 
-        int val = 20 - (int)distance;
+        int change = 5;
+        int val = Mathf.Abs(change - (int)distance);
 
-        byte r = Interpolate(startColors.r, endColors.r, 20, val);
-        byte g = Interpolate(startColors.g, endColors.g, 20, val);
-        byte b = Interpolate(startColors.b, endColors.b, 20, val);
+        byte r = Interpolate(startColors.r, endColors.r, change, val);
+        byte g = Interpolate(startColors.g, endColors.g, change, val);
+        byte b = Interpolate(startColors.b, endColors.b, change, val);
 
         platWarning.GetComponent<Renderer>().material.color = new Color32(r, g, b, 255);
 

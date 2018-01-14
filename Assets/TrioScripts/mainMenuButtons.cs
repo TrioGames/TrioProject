@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Facebook.Unity;
@@ -124,7 +124,7 @@ public class mainMenuButtons : MonoBehaviour
         else if (isLoggedIn && LogoutButton != null)
         {
             CreateUserInfo();
-            LogoutButton.SetActive(true);
+            //LogoutButton.SetActive(true);
             LoginButton.SetActive(false);
         }
     }
@@ -230,9 +230,15 @@ public class mainMenuButtons : MonoBehaviour
 
     public void DisplayScoreView()
     {
-        GetFriendList();
-        HighScoreMenu.SetActive(true);
-        MainMenu.SetActive(false);
+        if(FB.IsLoggedIn)
+        {
+            GetFriendList();
+            HighScoreMenu.SetActive(true);
+            MainMenu.SetActive(false);
+        } else
+        {
+            Login();
+        }
     }
 
     public void setscore()
