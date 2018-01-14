@@ -44,7 +44,10 @@ public class mainMenuButtons : MonoBehaviour
     {
         instance = this;
         FacebookManager.Instance.InitFB();
-        HighScoreMenu.SetActive(false);
+        if (HighScoreMenu != null)
+        {
+            HighScoreMenu.SetActive(false);
+        }
         UpdateScoreBoard();
     }
 

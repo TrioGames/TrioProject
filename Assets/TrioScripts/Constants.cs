@@ -47,7 +47,7 @@ public class Constants : MonoBehaviour {
 
 	public const int GAME_STATUS_PAUSE = 0;
 
-	public const float GRAVITY_DEFAULT = -2.5f;
+	public const float GRAVITY_DEFAULT = -5f;
 
 	public const float GRAVITY_LOW = -1.0f;
 

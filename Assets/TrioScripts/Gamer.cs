@@ -55,7 +55,7 @@ public class Gamer : MonoBehaviour {
 	public bool LowGravityMode;
 
 	// top yukseldikce platformlar daha sik geliyor
-	private readonly float[,] spawnHeightArray  = new float[3,2] { {4.5f, 9.0f}, {4.0f, 7.5f}, {3.0f,6.0f} };
+	private readonly float[,] spawnHeightArray  = new float[4,2] { {3f, 4f}, {2f, 3f}, {1.0f,2.0f}, { 0.2f, 1.25f } };
 	private int gameLevel; //0-1-2 olabilir
 
 
@@ -64,7 +64,7 @@ public class Gamer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PauseGame ();
+		// PauseGame ();
 
 		DisableLowGravityMode ();
 
@@ -76,16 +76,14 @@ public class Gamer : MonoBehaviour {
 
         gameLevel = 0;
 
-		obj1 = GetRandomObject ();
-		obj1.transform.position = obj1Pos;
+		// obj1 = GetRandomObject ();
+		// obj1.transform.position = obj1Pos;
 
-		obj2 = GetRandomObject ();
-		obj2.transform.position = obj2Pos;
+		// obj2 = GetRandomObject ();
+		// obj2.transform.position = obj2Pos;
 
-		obj3 = GetRandomObject ();
-		obj3.transform.position = obj3Pos;
-
-        RotateGameObjects();
+		// obj3 = GetRandomObject ();
+		// obj3.transform.position = obj3Pos;
     }
 
     public Gamer GetInstance()
@@ -301,11 +299,11 @@ public class Gamer : MonoBehaviour {
 	void Update () {
 		playerTrans = GameObject.FindGameObjectWithTag(Constants.TAG_BALL).transform;
 		float playerHeight = playerTrans.position.y;
-		RecreateMissingObject ();
+		// RecreateMissingObject ();
 		IncreaseGameDifficulty (playerHeight);
 		MaintainPlatforms (playerHeight);
 		MaintainPowerups (playerHeight);
-		// SpawnPowerups (playerHeight);
+		SpawnPowerups (playerHeight);
 		Warn4ComingPlatforms (playerHeight);
 	}
 
@@ -333,9 +331,11 @@ public class Gamer : MonoBehaviour {
 
     private void IncreaseGameDifficulty(float playerHeight)
 	{
-		if (playerHeight > 60)
+        if (playerHeight > 60)
+            gameLevel = 3;
+        if (playerHeight > 30)
 			gameLevel = 2;
-		else if (playerHeight > 30)
+		else if (playerHeight > 10)
 			gameLevel = 1;
 		else 
 			gameLevel = 0;

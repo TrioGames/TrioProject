@@ -50,7 +50,16 @@ public class BallBehaviour : MonoBehaviour {
 			count++;
 		}
 
-		if (col.gameObject.name == "RespawnPlane")
+        print(col.gameObject.tag);
+        if (col.gameObject.tag.Equals(Constants.TAG_PLATFORM) && Gamer.instance.ballMode != Constants.FIREBALL_MODE)
+        {
+            DeathSound.Play();
+            //DontDestroyOnLoad(DeathSound);
+            Score.instance.StoreHighScore();
+            Application.LoadLevel("MenuScene");
+        }
+
+        if (col.gameObject.name == "RespawnPlane")
 		{
 			DeathSound.Play();
 			//DontDestroyOnLoad(DeathSound);
@@ -71,11 +80,8 @@ public class BallBehaviour : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col)
 	{
-
-		if (col.gameObject.tag.Equals (Constants.TAG_PLATFORM)) {
-			JumpSound.Play();
-		}
-		else if (col.gameObject.tag.Equals (Constants.TAG_BONUS))
+       
+		if (col.gameObject.tag.Equals (Constants.TAG_BONUS))
 		{
 			//PowerupSound.Play();
 		}
