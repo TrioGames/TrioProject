@@ -88,10 +88,10 @@ public class FacebookManager : MonoBehaviour
         IsLoggedIn = FB.IsLoggedIn;
     }
 
-    public void PostFBScore(Action<IGraphResult> action)
+    public void PostFBScore(string score, Action<IGraphResult> action)
     {
         var scoreData = new Dictionary<string, string>();
-        scoreData["score"] = Score.instance.GetHighScore().ToString();
+        scoreData["score"] = score;
 
         FB.API("/me/scores", HttpMethod.POST, delegate (IGraphResult result)
         {
