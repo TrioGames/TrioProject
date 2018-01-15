@@ -56,7 +56,7 @@ public class Gamer : MonoBehaviour
 	public bool LowGravityMode;
 
 	// top yukseldikce platformlar daha sik geliyor
-	private readonly float[,] spawnHeightArray  = new float[4,2] { {3f, 4f}, {2f, 3f}, {1.0f,2.0f}, { 0.2f, 1.25f } };
+	private readonly float[,] spawnHeightArray  = new float[4,2] { {2f, 3f}, {1.0f, 2f}, {0.25f, 1.0f}, { 0.02f, 0.25f } };
 	private int gameLevel; //0-1-2 olabilir
 
 
@@ -348,21 +348,22 @@ public class Gamer : MonoBehaviour
 
 	private void Warn4ComingPlatforms(float playerHeight)
 	{
-        Transform plat =  GetNearestPlatformsCoordinates (playerHeight);
+        Transform plat =  GetNearestPlatformsCoordinates (platWarning.position.y);
 		if (plat != null) {
 			//PlatformWarning.transform.position = new Vector3(plat.position.x , PlatformWarning.transform.position.y , PlatformWarning.transform.position.z );
 			//PlatformWarning.enabled = true;
 			Vector3 newPos = new Vector3(plat.position.x , platWarning.position.y , platWarning.position.z );
 			platWarning.position = Vector3.MoveTowards(platWarning.position , newPos, 5 * Time.deltaTime);
             //print ((int)PlatformWarning.transform.position.x + "," + (int)PlatformWarning.transform.position.y);
-
-		}
+            float distance = Vector3.Distance(platWarning.position, plat.position); ;
+            ChageWarningIconColorWithDistance(distance);
+        }
 		else 
 		{
 			//PlatformWarning.enabled = false;	
 		}
-        float distance = Vector3.Distance(mainball.transform.position, plat.position); ;
-        ChageWarningIconColorWithDistance(distance);
+        
+        
     }
 
     static byte Interpolate(int start, int end, int steps, int count)

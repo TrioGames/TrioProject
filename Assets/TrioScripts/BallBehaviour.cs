@@ -50,7 +50,6 @@ public class BallBehaviour : MonoBehaviour {
 			count++;
 		}
 
-        print(col.gameObject.tag);
         if (col.gameObject.tag.Equals(Constants.TAG_PLATFORM) && Gamer.instance.ballMode != Constants.FIREBALL_MODE)
         {
             DeathSound.Play();
