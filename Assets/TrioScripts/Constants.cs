@@ -57,11 +57,11 @@ public class Constants : MonoBehaviour {
 
     public const float ROTATE_SPEED = 10;
 
-    public const bool IsMobile = false;
+    public const bool IsMobile = true;
 
     public const bool IsWeb = false;
 
-    public const bool IsEditor = true;
+    public const bool IsEditor = false;
 
     public const int POSSIBLITY_TO_GET_BONUS = 25;
 }
