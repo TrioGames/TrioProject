@@ -42,7 +42,7 @@ public class Gamer : MonoBehaviour
 //	private float nextPlatformCheck = 2.0f;
 	private ArrayList platforms;
 	public float platformLower = Constants.HEIGHT_NO_PLATFORM;
-	public float platformRange = 500.0f;
+	public float platformRange = 1.0f;
 
 	//powerup variables
 	public int ballMode = Constants.NORMAL_MODE;
@@ -56,8 +56,8 @@ public class Gamer : MonoBehaviour
 	public bool LowGravityMode;
 
 	// top yukseldikce platformlar daha sik geliyor
-	private readonly float[,] spawnHeightArray  = new float[4,2] { {2f, 3f}, {1.0f, 2f}, {0.25f, 1.0f}, { 0.02f, 0.25f } };
-	private int gameLevel; //0-1-2 olabilir
+	private readonly float[,] spawnHeightArray  = new float[4,2] { { 2f, 4f }, { 1.50f, 2.5f }, { 0.75f, 1.50f }, { 0.5f, 1f } }; //{ 2f, 4f }, { 1.50f, 2.5f }, { 0.75f, 1.50f }, { 0.5f, 1f }
+    private int gameLevel; //0-1-2 olabilir
 
 
 	//for singleton
@@ -344,7 +344,8 @@ public class Gamer : MonoBehaviour
 			gameLevel = 1;
 		else 
 			gameLevel = 0;
-	}
+        print("playerHeight:" + playerHeight + "levle" + gameLevel);
+    }
 
 	private void Warn4ComingPlatforms(float playerHeight)
 	{
@@ -455,9 +456,9 @@ public class Gamer : MonoBehaviour
     private void MaintainPlatforms(float playerHeight)
     {
         DeletePlatformsBelowPlane();
-        if (playerHeight > platformLower - platformRange / 2)
+        if (playerHeight > platformLower - 2) //platformRange / 2
         {
-            SpawnPlatforms(platformLower, platformLower + platformRange);
+            SpawnPlatforms(platformLower, platformLower + 2);
         }
     }
 
@@ -471,7 +472,7 @@ public class Gamer : MonoBehaviour
             spawnLowerLimit = spawnHeightArray[gameLevel, 0];
             spawnHigherLimit = spawnHeightArray[gameLevel, 1];
             spawnHeight += Random.Range(spawnLowerLimit, spawnHigherLimit);
-            float x = Random.Range(-0.8f, 0.8f);
+            float x = Random.Range(-1f, 1f);
             Vector3 pos = new Vector3(x, spawnHeight, -17.0f);
 
             Transform plat = (Transform)Instantiate(platformPrefab, pos, Quaternion.identity);

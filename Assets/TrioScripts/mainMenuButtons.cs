@@ -55,7 +55,7 @@ public class mainMenuButtons : MonoBehaviour
     public void UpdateScoreBoard()
     {
         if (null != Skor)
-            DisplayUserName("Guesst");
+            DisplayUserName("SCORE");
     }
 
     public void StartGame()
@@ -117,7 +117,7 @@ public class mainMenuButtons : MonoBehaviour
             LoginButton.SetActive(true);
             Avatar.SetActive(false);
 
-            DisplayUserName("Guesst");
+            DisplayUserName("SCORE");
             DestroyScoreBoardPanels();
 
         }
@@ -134,7 +134,7 @@ public class mainMenuButtons : MonoBehaviour
         {
             if (_result.Error != null)
             {
-                DisplayUserName("Guesst");
+                DisplayUserName("SCORE");
             }
             else
             {
@@ -335,7 +335,7 @@ public class mainMenuButtons : MonoBehaviour
         {
             if (_result.Error != null)
             {
-                DisplayUserName("Guesst");
+                DisplayUserName("SCORE");
             }
             else
             {

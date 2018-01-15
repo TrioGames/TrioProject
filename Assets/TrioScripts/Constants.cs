@@ -49,7 +49,7 @@ public class Constants : MonoBehaviour {
 
 	public const float GRAVITY_DEFAULT = -5f;
 
-	public const float GRAVITY_LOW = -1.0f;
+	public const float GRAVITY_LOW = -2.5f;
 
 	public const float GRAVITY_TIMER = 10;
 
