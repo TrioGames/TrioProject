@@ -19,6 +19,12 @@ public class TouchBehaviour : MonoBehaviour {
             return;
         }
 
+        if (Gamer.instance.GameStatus == Constants.GAME_STATUS_SLOWMO)
+        {
+            return;
+        }
+
+        Gamer.instance.StartGame();
         Vector2 position = touchDeltaPosition != null? (Vector2) touchDeltaPosition : (Vector2) mouseDeltaPosition;
 
         int quarter = getTouchedQuarter(position);

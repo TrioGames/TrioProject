@@ -52,29 +52,33 @@ public class BallBehaviour : MonoBehaviour {
 
         if (col.gameObject.tag.Equals(Constants.TAG_PLATFORM) && Gamer.instance.ballMode != Constants.FIREBALL_MODE)
         {
-            DeathSound.Play();
+            // DeathSound.Play();
             //DontDestroyOnLoad(DeathSound);
+            print("ok");
             Score.instance.StoreHighScore();
-            Application.LoadLevel("MenuScene");
+            // col.gameObject.GetComponent<Collider>().isTrigger = true;
+            StartCoroutine(WaitRestart());
         }
 
         if (col.gameObject.name == "RespawnPlane")
 		{
-			DeathSound.Play();
-			//DontDestroyOnLoad(DeathSound);
-			Score.instance.StoreHighScore();
-			Application.LoadLevel ("MenuScene");
-		}
+			//DeathSound.Play();
+            //DontDestroyOnLoad(DeathSound);
+            Score.instance.StoreHighScore();
+            // col.gameObject.GetComponent<Collider>().isTrigger = true;
+            StartCoroutine(WaitRestart());
+        }
 	}
 
-	IEnumerator wait(float f)
+	IEnumerator WaitRestart()
 	{
-		//Do whatever you need done here before waiting
-		
-		yield return new WaitForSeconds (2f);
-		
-		//do stuff after the 2 seconds
-	}
+        //Do whatever you need done here before waiting
+        //Gamer.instance.PauseGame();
+        Gamer.instance.SlowmoGame();
+        yield return new WaitForSeconds (0.2f);
+        Application.LoadLevel("MenuScene");
+        //do stuff after the 2 seconds
+    }
 	
 
 	void OnTriggerEnter(Collider col)

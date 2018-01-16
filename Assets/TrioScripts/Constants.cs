@@ -25,7 +25,7 @@ public class Constants : MonoBehaviour {
 
 	public const float FIREBALL_TIMER_INIT = 10;
 
-	public const float SUPERBALL_TIMER_INIT = 3;
+	public const float SUPERBALL_TIMER_INIT = 5;
 
 	public const string FIREBALL_BONUS = "fireballbonus";
 
@@ -39,7 +39,7 @@ public class Constants : MonoBehaviour {
 
 	public const float POWERUP_LIFE_TIMER = 20;
 
-	public const float HEIGHT_NO_PLATFORM = 8.0f;
+	public const float HEIGHT_NO_PLATFORM = 4.0f;
 
 	public const int GAME_STATUS_END = 2;
 
@@ -47,7 +47,9 @@ public class Constants : MonoBehaviour {
 
 	public const int GAME_STATUS_PAUSE = 0;
 
-	public const float GRAVITY_DEFAULT = -5f;
+    public const int GAME_STATUS_SLOWMO = 3;
+
+    public const float GRAVITY_DEFAULT = -5f;
 
 	public const float GRAVITY_LOW = -2.5f;
 
@@ -63,5 +65,5 @@ public class Constants : MonoBehaviour {
 
     public const bool IsEditor = false;
 
-    public const int POSSIBLITY_TO_GET_BONUS = 25;
+    public const int POSSIBLITY_TO_GET_BONUS = 10;
 }

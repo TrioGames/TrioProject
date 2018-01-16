@@ -56,7 +56,7 @@ public class Gamer : MonoBehaviour
 	public bool LowGravityMode;
 
 	// top yukseldikce platformlar daha sik geliyor
-	private readonly float[,] spawnHeightArray  = new float[4,2] { { 2f, 4f }, { 1.50f, 2.5f }, { 0.75f, 1.50f }, { 0.5f, 1f } }; //{ 2f, 4f }, { 1.50f, 2.5f }, { 0.75f, 1.50f }, { 0.5f, 1f }
+	private readonly float[,] spawnHeightArray  = new float[4,2] { { 2f, 4f }, { 1.50f, 2.5f }, { 0.75f, 1.50f }, { 0.25f, 1.25f } }; //{ 2f, 4f }, { 1.50f, 2.5f }, { 0.75f, 1.50f }, { 0.5f, 1f }
     private int gameLevel; //0-1-2 olabilir
 
 
@@ -65,7 +65,7 @@ public class Gamer : MonoBehaviour
 
 	// Use this for initialization
 	void Start () {
-		// PauseGame ();
+		PauseGame ();
 
 		DisableLowGravityMode ();
 
@@ -197,6 +197,12 @@ public class Gamer : MonoBehaviour
         GameStatus = Constants.GAME_STATUS_PAUSE;
         mainMenuButtons.instance.UpdateScoreBoard();
         Time.timeScale = 0.0f;
+    }
+
+    public void SlowmoGame()
+    {
+        GameStatus = Constants.GAME_STATUS_SLOWMO;
+        Time.timeScale = 0.1f;
     }
 
     public void EndGame()
@@ -344,7 +350,7 @@ public class Gamer : MonoBehaviour
 			gameLevel = 1;
 		else 
 			gameLevel = 0;
-        print("playerHeight:" + playerHeight + "levle" + gameLevel);
+        // print("playerHeight:" + playerHeight + "levle" + gameLevel);
     }
 
 	private void Warn4ComingPlatforms(float playerHeight)
@@ -478,6 +484,9 @@ public class Gamer : MonoBehaviour
             Transform plat = (Transform)Instantiate(platformPrefab, pos, Quaternion.identity);
             plat.tag = "Platform";
 
+            float extendWitdh = Random.Range(0f, (gameLevel / 5));
+            plat.transform.localScale += new Vector3(extendWitdh, 0, 0);
+
             if (ballMode != Constants.FIREBALL_MODE)
             { // normal mode
                 plat.gameObject.GetComponent<Collider>().isTrigger = false;
@@ -576,7 +585,7 @@ public class Gamer : MonoBehaviour
     {
         if (playerHeight > powerupSpawnedUpTo + nextPowerUpCheck)
         {
-            float y = playerHeight + Random.Range(5.6f, 9.5f);
+            float y = playerHeight + Random.Range(15f, 30f);
             float x = Random.Range(-0.8f, 0.8f);
             Vector3 pos = new Vector3(x, y, -17.0f);
             string powerupName = GetBonus();
